@@ -65,19 +65,6 @@ margin-top:15px;
 color:pink;
 }
 
-#photo{
-margin-top:30px;
-max-width:320px;
-border-radius:20px;
-box-shadow:0 0 30px red;
-animation:fadeIn 2s ease-in-out;
-}
-
-@keyframes fadeIn{
-from{opacity:0; transform:scale(0.8);}
-to{opacity:1; transform:scale(1);}
-}
-
 .heart{
 position:absolute;
 color:red;
@@ -129,8 +116,7 @@ visibility:visible;
 
 <p class="typing" id="text"></p >
 
-<!-- الصورة هنا مش جوه النص -->
-< img id="photo" src="love1.jpg" alt="Love">
+<div id="imageContainer"></div>
 
 <br><br>
 <button onclick="surprise()">اضغطي هنا يا أجمل حاجة في حياتي ❤️</button>
@@ -171,6 +157,11 @@ if(password === "love"){
 document.getElementById("login").style.display="none";
 document.getElementById("content").style.display="block";
 document.getElementById("bgMusic").play();
+
+// الصورة بتتحط هنا
+document.getElementById("imageContainer").innerHTML =
+'< img src="love1.jpg" style="margin-top:30px;max-width:320px;border-radius:20px;box-shadow:0 0 30px red;">';
+
 typeWriter();
 createHearts();
 startCounter();
