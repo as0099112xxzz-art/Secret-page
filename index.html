@@ -69,7 +69,7 @@ color:pink;
 margin-top:30px;
 max-width:320px;
 border-radius:20px;
-display:none;
+display:block;
 box-shadow:0 0 30px red;
 animation:fadeIn 2s ease-in-out;
 }
@@ -99,12 +99,18 @@ width:100%;
 height:100%;
 background:rgba(0,0,0,0.95);
 color:white;
+display:flex;
 justify-content:center;
 align-items:center;
 text-align:center;
 padding:20px;
 flex-direction:column;
 z-index:999;
+visibility:hidden;
+}
+
+#surpriseBox.active{
+visibility:visible;
 }
 </style>
 </head>
@@ -169,11 +175,6 @@ document.getElementById("bgMusic").play();
 typeWriter();
 createHearts();
 startCounter();
-
-setTimeout(function(){
-document.getElementById("photo").style.display="block";
-},4000);
-
 }else{
 alert("غلط 😢");
 }
@@ -224,11 +225,11 @@ setTimeout(function(){heart.remove();},6000);
 }
 
 function surprise(){
-document.getElementById("surpriseBox").style.display="flex";
+document.getElementById("surpriseBox").classList.add("active");
 }
 
 function closeSurprise(){
-document.getElementById("surpriseBox").style.display="none";
+document.getElementById("surpriseBox").classList.remove("active");
 }
 
 </script>
