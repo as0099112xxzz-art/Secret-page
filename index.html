@@ -22,11 +22,13 @@ left:50%;
 transform:translate(-50%,-50%);
 }
 
-input{
+input, textarea{
 padding:10px;
 font-size:18px;
 border-radius:10px;
 border:none;
+width:80%;
+max-width:400px;
 }
 
 button{
@@ -76,9 +78,7 @@ transition:0.3s;
 font-size:30px;
 }
 
-.card:hover{
-transform:scale(1.1);
-}
+.card:hover{transform:scale(1.1);}
 
 #cardsMessage{
 margin-top:20px;
@@ -115,6 +115,12 @@ max-width:700px;
 margin-left:auto;
 margin-right:auto;
 }
+
+#herMessage{
+margin-top:15px;
+color:pink;
+font-size:20px;
+}
 </style>
 </head>
 
@@ -130,9 +136,7 @@ margin-right:auto;
 <div id="content">
 
 <div id="zahraaName">Zahraa ❤️</div>
-
 <h1>❤️ من يوم 8 أبريل 2025 ❤️</h1>
-
 <div id="counter"></div>
 
 <p id="text" style="white-space:pre-line; line-height:1.8; width:85%; margin:auto;"></p>
@@ -161,13 +165,30 @@ margin-right:auto;
 عاوزك انتي ❤️
 </div>
 
+<!-- رأيها -->
+<button onclick="showInput()">حطي الي عاوزه تقوليه هنا يا عمري ❤️</button>
+
+<div id="inputSection" style="display:none;">
+<textarea id="herInput" rows="4" placeholder="اكتبي اللي جواكي ❤️"></textarea>
+<br>
+<button onclick="saveHerMessage()">إرسال ❤️</button>
+</div>
+
+<div id="herMessage"></div>
+
 <audio id="bgMusic" loop>
 <source src="music.mp3" type="audio/mpeg">
 </audio>
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
 <script>
+
+(function(){
+emailjs.init("o39Psl-nHuQTtGUx5");
+})();
 
 function checkPass(){
 var password=document.getElementById("pass").value;
@@ -193,10 +214,7 @@ var minutes=Math.floor((distance%(1000*60*60))/(1000*60));
 var seconds=Math.floor((distance%(1000*60))/1000);
 
 document.getElementById("counter").innerHTML=
-"عدّى علينا: "+days+" يوم "+
-hours+" ساعة "+
-minutes+" دقيقة "+
-seconds+" ثانية ❤️";
+"عدّى علينا: "+days+" يوم "+hours+" ساعة "+minutes+" دقيقة "+seconds+" ثانية ❤️";
 },1000);
 }
 
@@ -222,9 +240,7 @@ document.getElementById("cardsMessage").innerHTML+=words[currentWord]+" ";
 explodeHearts(card);
 card.style.visibility="hidden";
 currentWord++;
-if(currentWord===words.length){
-bigExplosion();
-}
+if(currentWord===words.length){bigExplosion();}
 }
 }
 
@@ -263,6 +279,24 @@ setTimeout(function(){
 document.getElementById("loader").style.display="none";
 document.getElementById("truthContent").style.display="block";
 },4000);
+}
+
+function showInput(){
+document.getElementById("inputSection").style.display="block";
+}
+
+function saveHerMessage(){
+var message=document.getElementById("herInput").value;
+
+if(message.trim()===""){
+alert("اكتبي حاجة الأول يا حياتي ❤️");
+return;
+}
+
+emailjs.send("service_qqc0g47","template_jiy5r1d",{message:message});
+
+document.getElementById("herMessage").innerHTML=
+"هي قالت: ❤️ <br><br>"+message;
 }
 
 </script>
