@@ -44,6 +44,7 @@ cursor:pointer;
 background:#ff4d6d;
 color:white;
 font-size:16px;
+cursor:pointer;
 }
 
 .section{
@@ -120,7 +121,6 @@ margin-top:20px;
 color:#ffb3c6;
 font-size:18px;
 }
-
 </style>
 </head>
 <body>
@@ -208,21 +208,28 @@ font-size:18px;
 
 </div>
 
-<audio id="music" loop>
+<!-- الصوت -->
+<audio id="music" loop preload="auto">
 <source src="music1.mp3" type="audio/mp3">
 </audio>
 
 <script>
 
-/* تشغيل بعد الباسورد */
+/* دخول */
 function checkPassword(){
 let pass=document.getElementById("passwordInput").value;
 
 if(pass==="love"){
 document.getElementById("intro").style.display="none";
 document.getElementById("mainContent").style.display="block";
-document.getElementById("music").play();
+
+/* تشغيل الصوت */
+let audio=document.getElementById("music");
+audio.play().catch(()=>{});
+
+/* بدء العدادات */
 startCounters();
+
 }else{
 document.getElementById("errorMsg").style.display="block";
 }
