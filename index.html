@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+   <!DOCTYPE html>
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
@@ -12,7 +12,7 @@ background:black;
 color:white;
 font-family:Arial;
 text-align:center;
-overflow:hidden;
+overflow-x:hidden;
 }
 
 #login{
@@ -22,11 +22,13 @@ left:50%;
 transform:translate(-50%,-50%);
 }
 
-input{
+input, textarea{
 padding:10px;
 font-size:18px;
 border-radius:10px;
 border:none;
+width:80%;
+max-width:400px;
 }
 
 button{
@@ -38,63 +40,82 @@ background:linear-gradient(45deg, red, pink);
 color:white;
 cursor:pointer;
 box-shadow:0 0 15px red;
+margin-top:10px;
 }
 
 #content{
 display:none;
-padding-top:50px;
+padding-top:40px;
 }
 
 h1{
 color:red;
-font-size:35px;
 }
 
-.typing{
-font-size:22px;
-width:85%;
-margin:auto;
-white-space:pre-line;
-line-height:1.8;
+#zahraaName{
+font-size:30px;
+color:pink;
+margin-bottom:10px;
+}
+
+.card-container{
+display:flex;
+justify-content:center;
+flex-wrap:wrap;
+gap:15px;
+margin-top:30px;
+}
+
+.card{
+width:120px;
+height:80px;
+background:#111;
+border-radius:15px;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+box-shadow:0 0 15px red;
+transition:0.3s;
+font-size:30px;
+}
+
+.card:hover{
+transform:scale(1.1);
+}
+
+#cardsMessage{
 margin-top:20px;
+font-size:22px;
+color:pink;
+display:none;
 }
 
-#counter{
-font-size:20px;
-margin-top:15px;
+#truthContent{
+display:none;
+margin-top:20px;
+font-size:22px;
+line-height:1.8;
+max-width:700px;
+margin-left:auto;
+margin-right:auto;
+}
+
+#loader{
+display:none;
+margin-top:20px;
+font-size:22px;
 color:pink;
 }
 
-.heart{
-position:absolute;
-color:red;
-animation:float 6s linear infinite;
+textarea{
+margin-top:15px;
 }
 
-@keyframes float{
-0%{transform:translateY(100vh);}
-100%{transform:translateY(-10vh);}
-}
-
-#surpriseBox{
-visibility:hidden;
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.95);
-display:flex;
-justify-content:center;
-align-items:center;
-text-align:center;
-padding:20px;
-flex-direction:column;
-z-index:999;
-}
-
-#surpriseBox.active{
-visibility:visible;
+#herMessage{
+margin-top:15px;
+color:pink;
+font-size:20px;
 }
 </style>
 </head>
@@ -110,81 +131,73 @@ visibility:visible;
 
 <div id="content">
 
+<div id="zahraaName">Zahraa ❤️</div>
+
 <h1>❤️ من يوم 8 أبريل 2025 ❤️</h1>
 
 <div id="counter"></div>
 
-<p class="typing" id="text"></p >
-
-<div id="imageContainer"></div>
-
-<br><br>
-<button onclick="surprise()">اضغطي هنا يا أجمل حاجة في حياتي ❤️</button>
-
-<audio id="bgMusic" loop>
-<source src="music.mp3" type="audio/mpeg">
-</audio>
-
+<!-- الكروت -->
+<div class="card-container">
+<div class="card" onclick="showCardMessage()">❤️</div>
+<div class="card" onclick="showCardMessage()">💕</div>
+<div class="card" onclick="showCardMessage()">💖</div>
 </div>
 
-<div id="surpriseBox">
-<h1 style="color:red;">مفاجأة ❤️</h1>
-<p style="font-size:24px; line-height:1.8; max-width:700px;">
-أنا ما اخترتش أحبك…  
-أنا لقيت نفسي بحبك من غير ما أحس ❤️  
+<div id="cardsMessage">
+محبيتش ولا هحب حد قدك ❤️
+</div>
 
-من أول يوم 8 أبريل 2025  
-وحياتي بدأت تاخد شكل تاني  
+<!-- وقت الصراحة -->
+<button onclick="truthTime()">وقت الصراحة ❤️</button>
 
-إنتِ أماني، وضحكتي، وسبب سعادتي  
-وكل حلم نفسي أعيشه يكون وإنتِ معايا 💕  
+<div id="loader">استني بس ثواني يا حياتي ⏳</div>
 
-لو الزمن رجع بيا  
-هختارك ألف مرة  
-من غير تفكير  
+<div id="truthContent">
+حبيتك ف وقت كنت رافض فيه الحب  
+ووصل بيا الحال اني اعشقك ومقدرش استغني عنك  
+حبك بقي ادمان  
+هنعافر وهنستحمل مع بعض عشان نكون لبعض  
+مقدرش ابص لغيرك  
+قلبي رافض كل البنات  
+عاوزك انتي ❤️
+</div>
 
-بحبك… وهفضل أحبك طول العمر ❤️
-</p >
+<!-- رأيها -->
+<button onclick="showInput()">حطي الي عاوزه تقوليه هنا يا عمري ❤️</button>
+
+<div id="inputSection" style="display:none;">
+<textarea id="herInput" rows="4" placeholder="اكتبي اللي جواكي ❤️"></textarea>
 <br>
-<button onclick="closeSurprise()">اقفلي المفاجأة ❤️</button>
+<button onclick="saveHerMessage()">إرسال ❤️</button>
 </div>
+
+<div id="herMessage"></div>
+
+</div>
+
+<!-- EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
 <script>
+
+(function(){
+emailjs.init("o39Psl-nHuQTtGUx5");
+})();
 
 function checkPass(){
 var password = document.getElementById("pass").value;
 if(password === "love"){
 document.getElementById("login").style.display="none";
 document.getElementById("content").style.display="block";
-document.getElementById("bgMusic").play();
-
-// الصورة بتتحط هنا
-document.getElementById("imageContainer").innerHTML =
-'< img src="love1.jpg" style="margin-top:30px;max-width:320px;border-radius:20px;box-shadow:0 0 30px red;">';
-
-typeWriter();
-createHearts();
 startCounter();
 }else{
 alert("الباسورد غلط 😢");
 }
 }
 
-var i = 0;
-
-var txt = "من يوم ما عرفتك وأنا حاسس إن الدنيا بقت أهدى وأجمل ❤️\n\nكل يوم بيعدي وإنتِ فيه بيأكدلي إني محظوظ.\nوجودك في حياتي فرق معايا في كل حاجة.\n\nمش بس بحبك…\nأنا بختارك كل يوم.\nوبتمنى نكمل المشوار سوا لآخر العمر 💕";
-
-function typeWriter(){
-if(i < txt.length){
-document.getElementById("text").innerHTML += txt.charAt(i);
-i++;
-setTimeout(typeWriter,45);
-}
-}
-
 function startCounter(){
 var startDate = new Date("April 8, 2025 00:00:00").getTime();
-
 setInterval(function(){
 var now = new Date().getTime();
 var distance = now - startDate;
@@ -202,24 +215,44 @@ seconds + " ثانية ❤️";
 },1000);
 }
 
-function createHearts(){
-setInterval(function(){
-var heart = document.createElement("div");
-heart.className="heart";
-heart.innerHTML="❤️";
-heart.style.left=Math.random()*100+"vw";
-heart.style.fontSize=Math.random()*20+20+"px";
-document.body.appendChild(heart);
-setTimeout(function(){heart.remove();},6000);
-},500);
+function showCardMessage(){
+document.getElementById("cardsMessage").style.display="block";
 }
 
-function surprise(){
-document.getElementById("surpriseBox").classList.add("active");
+function truthTime(){
+document.getElementById("loader").style.display="block";
+document.getElementById("truthContent").style.display="none";
+
+setTimeout(function(){
+document.getElementById("loader").style.display="none";
+document.getElementById("truthContent").style.display="block";
+},4000);
 }
 
-function closeSurprise(){
-document.getElementById("surpriseBox").classList.remove("active");
+function showInput(){
+document.getElementById("inputSection").style.display="block";
+}
+
+function saveHerMessage(){
+var message = document.getElementById("herInput").value;
+
+if(message.trim() === ""){
+alert("اكتبي حاجة الأول يا حياتي ❤️");
+return;
+}
+
+emailjs.send("service_qqc0g47","template_jiy5r1d",{
+message: message
+})
+.then(function(){
+alert("وصلتني رسالتك يا قلبي ❤️");
+})
+.catch(function(){
+alert("حصل مشكلة بسيطة 😢");
+});
+
+document.getElementById("herMessage").innerHTML =
+"هي قالت: ❤️ <br><br>" + message;
 }
 
 </script>
