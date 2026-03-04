@@ -22,13 +22,11 @@ left:50%;
 transform:translate(-50%,-50%);
 }
 
-input, textarea{
+input{
 padding:10px;
 font-size:18px;
 border-radius:10px;
 border:none;
-width:80%;
-max-width:400px;
 }
 
 button{
@@ -139,7 +137,6 @@ margin-right:auto;
 
 <p id="text" style="white-space:pre-line; line-height:1.8; width:85%; margin:auto;"></p>
 
-<!-- الكروت -->
 <div class="card-container" id="cardsSection">
 <div class="card" onclick="showCardWord(this)">❤️</div>
 <div class="card" onclick="showCardWord(this)">💕</div>
@@ -151,7 +148,6 @@ margin-right:auto;
 
 <div id="cardsMessage"></div>
 
-<!-- وقت الصراحة -->
 <button onclick="truthTime()">وقت الصراحة ❤️</button>
 <div id="loader">استني بس ثواني يا حياتي ⏳</div>
 
@@ -165,15 +161,20 @@ margin-right:auto;
 عاوزك انتي ❤️
 </div>
 
+<audio id="bgMusic" loop>
+<source src="music.mp3" type="audio/mpeg">
+</audio>
+
 </div>
 
 <script>
 
 function checkPass(){
-var password = document.getElementById("pass").value;
-if(password === "love"){
+var password=document.getElementById("pass").value;
+if(password==="love"){
 document.getElementById("login").style.display="none";
 document.getElementById("content").style.display="block";
+document.getElementById("bgMusic").play();
 startCounter();
 typeWriter();
 }else{
@@ -182,30 +183,29 @@ alert("الباسورد غلط 😢");
 }
 
 function startCounter(){
-var startDate = new Date("April 8, 2025 00:00:00").getTime();
+var startDate=new Date("April 8, 2025 00:00:00").getTime();
 setInterval(function(){
-var now = new Date().getTime();
-var distance = now - startDate;
+var now=new Date().getTime();
+var distance=now-startDate;
+var days=Math.floor(distance/(1000*60*60*24));
+var hours=Math.floor((distance%(1000*60*60*24))/(1000*60*60));
+var minutes=Math.floor((distance%(1000*60*60))/(1000*60));
+var seconds=Math.floor((distance%(1000*60))/1000);
 
-var days = Math.floor(distance / (1000*60*60*24));
-var hours = Math.floor((distance % (1000*60*60*24)) / (1000*60*60));
-var minutes = Math.floor((distance % (1000*60*60)) / (1000*60));
-var seconds = Math.floor((distance % (1000*60)) / 1000);
-
-document.getElementById("counter").innerHTML =
-"عدّى علينا: " + days + " يوم " +
-hours + " ساعة " +
-minutes + " دقيقة " +
-seconds + " ثانية ❤️";
+document.getElementById("counter").innerHTML=
+"عدّى علينا: "+days+" يوم "+
+hours+" ساعة "+
+minutes+" دقيقة "+
+seconds+" ثانية ❤️";
 },1000);
 }
 
-var i = 0;
-var txt = "من يوم ما عرفتك وأنا حاسس إن الدنيا بقت أهدى وأجمل ❤️\n\nكل يوم بيعدي وإنتِ فيه بيأكدلي إني محظوظ.\nوجودك في حياتي فرق معايا في كل حاجة.\n\nمش بس بحبك…\nأنا بختارك كل يوم.\nوبتمنى نكمل المشوار سوا لآخر العمر 💕";
+var i=0;
+var txt="من يوم ما عرفتك وأنا حاسس إن الدنيا بقت أهدى وأجمل ❤️\n\nكل يوم بيعدي وإنتِ فيه بيأكدلي إني محظوظ.\nوجودك في حياتي فرق معايا في كل حاجة.\n\nمش بس بحبك…\nأنا بختارك كل يوم.\nوبتمنى نكمل المشوار سوا لآخر العمر 💕";
 
 function typeWriter(){
-if(i < txt.length){
-document.getElementById("text").innerHTML += txt.charAt(i);
+if(i<txt.length){
+document.getElementById("text").innerHTML+=txt.charAt(i);
 i++;
 setTimeout(typeWriter,45);
 }else{
@@ -213,17 +213,16 @@ document.getElementById("cardsSection").style.display="flex";
 }
 }
 
-var words = ["محبيتش", "ولا", "هحب", "حد", "قدك", "❤️"];
-var currentWord = 0;
+var words=["محبيتش","ولا","هحب","حد","قدك","❤️"];
+var currentWord=0;
 
 function showCardWord(card){
-if(currentWord < words.length){
-document.getElementById("cardsMessage").innerHTML += words[currentWord] + " ";
+if(currentWord<words.length){
+document.getElementById("cardsMessage").innerHTML+=words[currentWord]+" ";
 explodeHearts(card);
 card.style.visibility="hidden";
 currentWord++;
-
-if(currentWord === words.length){
+if(currentWord===words.length){
 bigExplosion();
 }
 }
@@ -234,8 +233,8 @@ for(let j=0;j<15;j++){
 let heart=document.createElement("div");
 heart.className="explosion-heart";
 heart.innerHTML="❤️";
-heart.style.left=element.getBoundingClientRect().left + 40 + "px";
-heart.style.top=element.getBoundingClientRect().top + 40 + "px";
+heart.style.left=element.getBoundingClientRect().left+40+"px";
+heart.style.top=element.getBoundingClientRect().top+40+"px";
 heart.style.setProperty("--x",(Math.random()*300-150)+"px");
 heart.style.setProperty("--y",(Math.random()*300-150)+"px");
 document.body.appendChild(heart);
@@ -260,7 +259,6 @@ setTimeout(()=>heart.remove(),1000);
 function truthTime(){
 document.getElementById("loader").style.display="block";
 document.getElementById("truthContent").style.display="none";
-
 setTimeout(function(){
 document.getElementById("loader").style.display="none";
 document.getElementById("truthContent").style.display="block";
