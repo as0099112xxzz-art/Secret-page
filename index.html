@@ -2,302 +2,370 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>For You ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zahraa ❤️</title>
 
 <style>
 body{
 margin:0;
-padding:0;
-background:black;
-color:white;
 font-family:Arial;
 text-align:center;
+background:linear-gradient(-45deg,#ff9a9e,#fad0c4,#ffdde1,#ffc3a0);
+background-size:400% 400%;
+animation:bg 10s ease infinite;
 overflow-x:hidden;
+color:#fff;
 }
 
-#login{
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
+@keyframes bg{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
 }
 
-input, textarea{
-padding:10px;
-font-size:18px;
-border-radius:10px;
-border:none;
-width:80%;
-max-width:400px;
+/* شاشة الدخول */
+#intro{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:black;
+color:white;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+z-index:9999;
+}
+
+#intro h1{
+font-size:40px;
+letter-spacing:3px;
 }
 
 button{
-padding:12px 22px;
-font-size:18px;
-border-radius:12px;
+padding:10px 20px;
 border:none;
-background:linear-gradient(45deg, red, pink);
+border-radius:20px;
+background:#ff4b5c;
 color:white;
+font-size:16px;
 cursor:pointer;
-box-shadow:0 0 15px red;
-margin-top:10px;
+margin-top:15px;
 }
 
-#content{
-display:none;
-padding-top:40px;
-}
+.section{margin:40px 0;}
 
-h1{color:red;}
-
-#zahraaName{
-font-size:30px;
-color:pink;
-margin-bottom:10px;
-}
-
-.card-container{
-display:none;
-justify-content:center;
-flex-wrap:wrap;
-gap:15px;
-margin-top:30px;
+img.top-img{
+width:220px;
+border-radius:20px;
+box-shadow:0 0 20px #fff;
+margin:20px 0;
 }
 
 .card{
-width:120px;
-height:80px;
-background:#111;
+width:260px;
+height:200px;
+margin:20px auto;
+perspective:1000px;
+cursor:pointer;
+}
+
+.card-inner{
+position:relative;
+width:100%;
+height:100%;
+transition:transform 0.8s;
+transform-style:preserve-3d;
+}
+
+.card.flipped .card-inner{
+transform:rotateY(180deg);
+}
+
+.card-front,.card-back{
+position:absolute;
+width:100%;
+height:100%;
+backface-visibility:hidden;
 border-radius:15px;
 display:flex;
 align-items:center;
 justify-content:center;
+padding:15px;
+box-shadow:0 0 15px rgba(0,0,0,0.3);
+}
+
+.card-front{background:#ffffff22;}
+.card-back{
+background:#ff4b5c;
+transform:rotateY(180deg);
+}
+
+.secret{
+display:none;
+margin-top:20px;
+font-size:18px;
+color:yellow;
+}
+
+.envelope{
+width:200px;
+height:120px;
+background:#fff;
+margin:20px auto;
+position:relative;
+display:none;
 cursor:pointer;
-box-shadow:0 0 15px red;
-transition:0.3s;
-font-size:30px;
 }
 
-.card:hover{transform:scale(1.1);}
-
-#cardsMessage{
-margin-top:20px;
-font-size:22px;
-color:pink;
-min-height:30px;
+.envelope:before{
+content:"";
+position:absolute;
+top:0;
+left:0;
+width:0;
+height:0;
+border-left:100px solid transparent;
+border-right:100px solid transparent;
+border-bottom:60px solid #ff4b5c;
 }
 
-.explosion-heart{
+.letter{
+display:none;
+background:white;
+color:black;
+padding:15px;
+margin-top:10px;
+border-radius:10px;
+}
+
+.floating{
 position:fixed;
-font-size:20px;
-animation:explode 1s ease-out forwards;
+top:0;
+left:0;
+width:100%;
+height:100%;
 pointer-events:none;
+overflow:hidden;
 }
 
-@keyframes explode{
-0%{transform:scale(0.5);opacity:1;}
-100%{transform:translate(var(--x),var(--y)) scale(2);opacity:0;}
-}
-
-#loader{
-display:none;
-margin-top:20px;
-font-size:22px;
-color:pink;
-}
-
-#truthContent{
-display:none;
-margin-top:20px;
-font-size:22px;
-line-height:1.8;
-max-width:700px;
-margin-left:auto;
-margin-right:auto;
-}
-
-#herMessage{
-margin-top:15px;
-color:pink;
+.floating span{
+position:absolute;
 font-size:20px;
+animation:float 10s linear infinite;
+}
+
+@keyframes float{
+0%{transform:translateY(100vh);}
+100%{transform:translateY(-10vh);}
+}
+
+.shake{
+animation:shake 0.5s;
+}
+
+@keyframes shake{
+0%{transform:translateX(0);}
+25%{transform:translateX(-10px);}
+50%{transform:translateX(10px);}
+75%{transform:translateX(-10px);}
+100%{transform:translateX(0);}
+}
+
+#loveCounter{
+font-size:22px;
+margin-top:20px;
 }
 </style>
 </head>
 
 <body>
 
-<div id="login">
-<h2>اكتب الباسورد ❤️</h2>
-<input type="password" id="pass" placeholder="الباسورد هنا">
-<br><br>
-<button onclick="checkPass()">دخول</button>
+<div id="intro">
+<h1 id="typeName"></h1>
+<button onclick="enterSite()">ادخل ❤️</button>
 </div>
 
-<div id="content">
+<h1>❤️ Zahraa ❤️</h1>
 
-<div id="zahraaName">Zahraa ❤️</div>
-<h1>❤️ من يوم 8 أبريل 2025 ❤️</h1>
-<div id="counter"></div>
+<img src="love1.jpg" class="top-img">
 
-<p id="text" style="white-space:pre-line; line-height:1.8; width:85%; margin:auto;"></p>
+<div id="countdown"></div>
+<div id="yearCountdown"></div>
+<div id="celebration"></div>
 
-<div class="card-container" id="cardsSection">
-<div class="card" onclick="showCardWord(this)">❤️</div>
-<div class="card" onclick="showCardWord(this)">💕</div>
-<div class="card" onclick="showCardWord(this)">💖</div>
-<div class="card" onclick="showCardWord(this)">💘</div>
-<div class="card" onclick="showCardWord(this)">💞</div>
-<div class="card" onclick="showCardWord(this)">💗</div>
+<!-- مواقفنا -->
+<div class="section">
+<h2>😂 مواقفنا المضحكة</h2>
+
+<div class="card" onclick="flipCard(this)">
+<div class="card-inner">
+<div class="card-front">موقف ضحكتني ❤️</div>
+<div class="card-back">
+لما كنا بنخبي مشاعرنا علي بعض ونكتبها ف دفاترنا عشان نقراها بعدين 🥹😂
+</div>
+</div>
 </div>
 
-<div id="cardsMessage"></div>
-
-<button onclick="truthTime()">وقت الصراحة ❤️</button>
-<div id="loader">استني بس ثواني يا حياتي ⏳</div>
-
-<div id="truthContent">
-حبيتك ف وقت كنت رافض فيه الحب  
-ووصل بيا الحال اني اعشقك ومقدرش استغني عنك  
-حبك بقي ادمان  
-هنعافر وهنستحمل مع بعض عشان نكون لبعض  
-مقدرش ابص لغيرك  
-قلبي رافض كل البنات  
-عاوزك انتي ❤️
+<div class="card" onclick="flipCard(this)">
+<div class="card-inner">
+<div class="card-front">أكتر موقف محرج 😅</div>
+<div class="card-back">
+فاكره لما كنتي بتخليني اعبر عن مشاعري ف ريكوردات وتخليني اغلط واعيد الريكورد تاني ؟ 😂
+</div>
+</div>
 </div>
 
-<!-- رأيها -->
-<button onclick="showInput()">حطي الي عاوزه تقوليه هنا يا عمري ❤️</button>
+<div class="card" onclick="flipCard(this)">
+<div class="card-inner">
+<div class="card-front">موقف غير حياتنا ❤️</div>
+<div class="card-back">
+الناس الي دخلت ف حياتنا دي هنعرفهم اننا نستحق بعض وان حبنا حقيقي صح ي روحي ؟ 👑❤️
+</div>
+</div>
+</div>
 
-<div id="inputSection" style="display:none;">
-<textarea id="herInput" rows="4" placeholder="اكتبي اللي جواكي ❤️"></textarea>
+</div>
+
+<!-- رسالة سرية -->
+<div class="section">
+<h2>🔐 رسالة سرية</h2>
+<input type="text" id="secretInput" placeholder="اكتبي الاسم">
 <br>
-<button onclick="saveHerMessage()">إرسال ❤️</button>
+<button onclick="checkName()">عرض</button>
+
+<div class="secret" id="secretMessage">
+انتي روحي وكل حياتي ❤️🔥
 </div>
 
-<div id="herMessage"></div>
+<div class="envelope" id="envelope" onclick="openLetter()"></div>
+<div class="letter" id="letter">
+Zahraa انتي الحاجة الوحيدة اللي عمري ما هفرط فيها ❤️
+</div>
+</div>
 
-<audio id="bgMusic" loop>
-<source src="music.mp3" type="audio/mpeg">
+<button onclick="startLove()">اعرفي أنا قد إيه بحبك ♾️</button>
+<div id="loveCounter"></div>
+
+<audio autoplay loop>
+<source src="music1.mp3" type="audio/mp3">
 </audio>
 
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<div class="floating" id="floating"></div>
 
 <script>
 
-(function(){
-emailjs.init("o39Psl-nHuQTtGUx5");
-})();
-
-function checkPass(){
-var password=document.getElementById("pass").value;
-if(password==="love"){
-document.getElementById("login").style.display="none";
-document.getElementById("content").style.display="block";
-document.getElementById("bgMusic").play();
-startCounter();
-typeWriter();
-}else{
-alert("الباسورد غلط 😢");
-}
-}
-
-function startCounter(){
-var startDate=new Date("April 8, 2025 00:00:00").getTime();
-setInterval(function(){
-var now=new Date().getTime();
-var distance=now-startDate;
-var days=Math.floor(distance/(1000*60*60*24));
-var hours=Math.floor((distance%(1000*60*60*24))/(1000*60*60));
-var minutes=Math.floor((distance%(1000*60*60))/(1000*60));
-var seconds=Math.floor((distance%(1000*60))/1000);
-
-document.getElementById("counter").innerHTML=
-"عدّى علينا: "+days+" يوم "+hours+" ساعة "+minutes+" دقيقة "+seconds+" ثانية ❤️";
-},1000);
-}
-
-var i=0;
-var txt="من يوم ما عرفتك وأنا حاسس إن الدنيا بقت أهدى وأجمل ❤️\n\nكل يوم بيعدي وإنتِ فيه بيأكدلي إني محظوظ.\nوجودك في حياتي فرق معايا في كل حاجة.\n\nمش بس بحبك…\nأنا بختارك كل يوم.\nوبتمنى نكمل المشوار سوا لآخر العمر 💕";
-
-function typeWriter(){
-if(i<txt.length){
-document.getElementById("text").innerHTML+=txt.charAt(i);
+// كتابة الاسم تدريجياً
+let text="Zahraa";
+let i=0;
+function typeEffect(){
+if(i<text.length){
+document.getElementById("typeName").innerHTML+=text.charAt(i);
 i++;
-setTimeout(typeWriter,45);
-}else{
-document.getElementById("cardsSection").style.display="flex";
+setTimeout(typeEffect,150);
+}
+}
+typeEffect();
+
+function enterSite(){
+document.getElementById("intro").style.display="none";
+}
+
+function flipCard(card){
+card.classList.toggle("flipped");
+explodeHearts(6);
+}
+
+function checkName(){
+let name=document.getElementById("secretInput").value.trim();
+
+if(name=="احمد"){
+document.getElementById("secretMessage").style.display="block";
+document.getElementById("envelope").style.display="block";
+}
+
+if(name=="Zahraa"){
+document.body.classList.add("shake");
+setTimeout(()=>document.body.classList.remove("shake"),500);
+explodeHearts(40);
 }
 }
 
-var words=["محبيتش","ولا","هحب","حد","قدك","❤️"];
-var currentWord=0;
-
-function showCardWord(card){
-if(currentWord<words.length){
-document.getElementById("cardsMessage").innerHTML+=words[currentWord]+" ";
-explodeHearts(card);
-card.style.visibility="hidden";
-currentWord++;
-if(currentWord===words.length){bigExplosion();}
-}
+function openLetter(){
+document.getElementById("letter").style.display="block";
+explodeHearts(20);
 }
 
-function explodeHearts(element){
-for(let j=0;j<15;j++){
-let heart=document.createElement("div");
-heart.className="explosion-heart";
-heart.innerHTML="❤️";
-heart.style.left=element.getBoundingClientRect().left+40+"px";
-heart.style.top=element.getBoundingClientRect().top+40+"px";
-heart.style.setProperty("--x",(Math.random()*300-150)+"px");
-heart.style.setProperty("--y",(Math.random()*300-150)+"px");
-document.body.appendChild(heart);
-setTimeout(()=>heart.remove(),1000);
-}
+function startLove(){
+let count=0;
+let interval=setInterval(()=>{
+count+=Math.floor(Math.random()*1000);
+document.getElementById("loveCounter").innerHTML="حب لا نهائي: "+count+" ❤️";
+explodeHearts(3);
+},200);
 }
 
-function bigExplosion(){
-for(let k=0;k<40;k++){
-let heart=document.createElement("div");
-heart.className="explosion-heart";
+function explodeHearts(num){
+for(let i=0;i<num;i++){
+let heart=document.createElement("span");
 heart.innerHTML="💖";
-heart.style.left="50%";
-heart.style.top="50%";
-heart.style.setProperty("--x",(Math.random()*600-300)+"px");
-heart.style.setProperty("--y",(Math.random()*600-300)+"px");
+heart.style.position="fixed";
+heart.style.left=Math.random()*100+"%";
+heart.style.top=Math.random()*100+"%";
+heart.style.fontSize="20px";
+heart.style.animation="float 2s linear forwards";
 document.body.appendChild(heart);
-setTimeout(()=>heart.remove(),1000);
+setTimeout(()=>heart.remove(),2000);
 }
 }
 
-function truthTime(){
-document.getElementById("loader").style.display="block";
-document.getElementById("truthContent").style.display="none";
-setTimeout(function(){
-document.getElementById("loader").style.display="none";
-document.getElementById("truthContent").style.display="block";
-},4000);
+function createFloating(){
+let container=document.getElementById("floating");
+for(let i=0;i<25;i++){
+let span=document.createElement("span");
+span.innerHTML=Math.random()>0.5?"❤️":"⭐";
+span.style.left=Math.random()*100+"%";
+span.style.animationDuration=(5+Math.random()*5)+"s";
+container.appendChild(span);
+}
+}
+createFloating();
+
+// عداد العلاقة
+let startDate=new Date("2025-04-08T00:00:00");
+let firstYear=new Date("2026-04-08T00:00:00");
+
+function updateCountdown(){
+let now=new Date();
+let diff=now-startDate;
+
+let days=Math.floor(diff/(1000*60*60*24));
+let hours=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+let minutes=Math.floor((diff%(1000*60*60))/(1000*60));
+let seconds=Math.floor((diff%(1000*60))/1000);
+
+document.getElementById("countdown").innerHTML=
+"مع بعض من 8 أبريل 2025 ❤️<br>"+days+" يوم "+hours+" ساعة "+minutes+" دقيقة "+seconds+" ثانية";
+
+let diffYear=firstYear-now;
+
+if(diffYear>0){
+let d=Math.floor(diffYear/(1000*60*60*24));
+let h=Math.floor((diffYear%(1000*60*60*24))/(1000*60*60));
+let m=Math.floor((diffYear%(1000*60*60))/(1000*60));
+let s=Math.floor((diffYear%(1000*60))/1000);
+
+document.getElementById("yearCountdown").innerHTML=
+"باقي على أول سنة 🎉<br>"+d+" يوم "+h+" ساعة "+m+" دقيقة "+s+" ثانية";
+}else{
+document.getElementById("celebration").innerHTML="🎉 عدت سنة كاملة ❤️";
+explodeHearts(80);
+}
 }
 
-function showInput(){
-document.getElementById("inputSection").style.display="block";
-}
-
-function saveHerMessage(){
-var message=document.getElementById("herInput").value;
-
-if(message.trim()===""){
-alert("اكتبي حاجة الأول يا حياتي ❤️");
-return;
-}
-
-emailjs.send("service_qqc0g47","template_jiy5r1d",{message:message});
-
-document.getElementById("herMessage").innerHTML=
-"هي قالت: ❤️ <br><br>"+message;
-}
+setInterval(updateCountdown,1000);
 
 </script>
 
