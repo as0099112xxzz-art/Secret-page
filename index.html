@@ -2,338 +2,195 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Zahraa ❤️</title>
 
 <style>
 body{
 margin:0;
 font-family:Arial;
+background:linear-gradient(45deg,#0f2027,#203a43,#2c5364);
+color:white;
 text-align:center;
-background:linear-gradient(-45deg,#ff9a9e,#fad0c4,#ffdde1,#ffc3a0);
-background-size:400% 400%;
-animation:bg 10s ease infinite;
 overflow-x:hidden;
-color:#fff;
-}
-@keyframes bg{
-0%{background-position:0% 50%;}
-50%{background-position:100% 50%;}
-100%{background-position:0% 50%;}
 }
 
-#intro{
+/* خلفية متحركة */
+canvas{
 position:fixed;
-width:100%;height:100%;
-background:black;color:white;
-display:flex;flex-direction:column;
-align-items:center;justify-content:center;
-z-index:9999;
+top:0;
+left:0;
+z-index:-1;
+}
+
+/* شاشة الدخول */
+#intro{
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+}
+
+input{
+padding:10px;
+border-radius:10px;
+border:none;
+margin:10px;
 }
 
 button{
 padding:10px 20px;
-border:none;border-radius:20px;
-background:#ff4b5c;color:white;
-font-size:16px;cursor:pointer;
-margin-top:10px;
+border:none;
+border-radius:20px;
+cursor:pointer;
+background:#ff4d6d;
+color:white;
+font-size:16px;
 }
 
-.section{margin:40px 0;}
-
-img.top-img{
-width:220px;border-radius:20px;
-box-shadow:0 0 20px #fff;
-margin:20px 0;
+.section{
+margin-top:50px;
 }
 
 .card{
-width:260px;height:200px;
-margin:20px auto;
-perspective:1000px;
-cursor:pointer;
-}
-.card-inner{
-position:relative;
-width:100%;height:100%;
-transition:transform 0.8s;
-transform-style:preserve-3d;
-}
-.card.flipped .card-inner{
-transform:rotateY(180deg);
-}
-.card-front,.card-back{
-position:absolute;
-width:100%;height:100%;
-backface-visibility:hidden;
+background:rgba(255,255,255,0.1);
+margin:15px auto;
+padding:20px;
 border-radius:15px;
-display:flex;align-items:center;
-justify-content:center;
-padding:15px;
-box-shadow:0 0 15px rgba(0,0,0,0.3);
-}
-.card-front{background:#ffffff22;}
-.card-back{
-background:#ff4b5c;
-transform:rotateY(180deg);
+width:80%;
+cursor:pointer;
+transition:0.3s;
 }
 
-.secret{display:none;margin-top:15px;color:yellow;}
-
-.envelope{
-width:200px;height:120px;
-background:white;margin:20px auto;
-display:none;cursor:pointer;
+.card:hover{
+background:rgba(255,255,255,0.3);
+transform:scale(1.05);
 }
 
-.letter{
-display:none;background:white;
-color:black;padding:15px;
-border-radius:10px;margin-top:10px;
+img{
+width:250px;
+border-radius:15px;
+margin:10px;
+cursor:pointer;
+transition:0.3s;
 }
 
-.floating{
-position:fixed;top:0;left:0;
-width:100%;height:100%;
-pointer-events:none;overflow:hidden;
-}
-.floating span{
-position:absolute;font-size:20px;
-animation:float 10s linear infinite;
-}
-@keyframes float{
-0%{transform:translateY(100vh);}
-100%{transform:translateY(-10vh);}
+img:hover{
+transform:scale(1.1);
 }
 
-.shake{animation:shake 0.5s;}
-@keyframes shake{
-0%{transform:translateX(0);}
-25%{transform:translateX(-10px);}
-50%{transform:translateX(10px);}
-75%{transform:translateX(-10px);}
-100%{transform:translateX(0);}
+#secretMessage{
+display:none;
+margin-top:20px;
+color:#ffcccb;
+font-size:18px;
 }
+
 </style>
 </head>
-
 <body>
+
+<canvas id="bg"></canvas>
 
 <!-- شاشة الدخول -->
 <div id="intro">
-<h1 id="typeName"></h1>
-<button onclick="enterSite()">ادخل ❤️</button>
+<h1>اكتب الباسورد ❤️</h1>
+<input type="password" id="passwordInput" placeholder="الباسورد">
+<button onclick="checkPassword()">ادخل</button>
+<p id="errorMsg" style="display:none;color:red;">الباسورد غلط 😅</p>
 </div>
 
-<h1>❤️ Zahraa ❤️</h1>
+<!-- الموقع -->
+<div id="mainContent" style="display:none;">
 
-<img src="love1.jpg" class="top-img">
+<h1>Zahraa ❤️</h1>
 
-<div id="countdown"></div>
-<div id="yearCountdown"></div>
-<div id="celebration"></div>
+<img src="love1.jpg">
 
-<!-- كلام ليكي -->
+<h2 id="counter"></h2>
+
 <div class="section">
-<h2>💌 كلام ليكي</h2>
+<h2>كلام من قلبي ليكي 💌</h2>
 
-<div class="card" onclick="flipCard(this)">
-<div class="card-inner">
-<div class="card-front">اضغطي هنا</div>
-<div class="card-back">انتي أجمل حاجة حصلتلي ❤️</div>
-</div>
-</div>
+<div class="card" onclick="showText(this,'انتي احلى حاجة حصلتلي ❤️')">اضغطي هنا</div>
+<div class="card" onclick="showText(this,'وجودك جمبي أمان ❤️')">اضغطي هنا</div>
+<div class="card" onclick="showText(this,'مهما حصل انا معاكي ❤️')">اضغطي هنا</div>
 
-<div class="card" onclick="flipCard(this)">
-<div class="card-inner">
-<div class="card-front">اضغطي هنا</div>
-<div class="card-back">وجودك في حياتي نعمة 💕</div>
-</div>
-</div>
 </div>
 
-<!-- ذكرياتنا -->
 <div class="section">
-<h2>📸 ذكرياتنا</h2>
+<h2>ذكرياتنا 📸</h2>
 
-<div class="card" onclick="flipCard(this)">
-<div class="card-inner">
-<div class="card-front">
-<img src="memory1.jpg" style="width:100%;height:100%;border-radius:15px;">
-</div>
-<div class="card-back">أول صورة لينا ❤️</div>
-</div>
+<div class="card">
+<img src="memory1.jpg" onclick="this.style.width='400px'">
+<p>لما كنا بنخبي مشاعرنا ونكتبها في دفاترنا ❤️</p>
 </div>
 
-<div class="card" onclick="flipCard(this)">
-<div class="card-inner">
-<div class="card-front">
-<img src="memory2.jpg" style="width:100%;height:100%;border-radius:15px;">
-</div>
-<div class="card-back">ضحكتنا سوا 😂💕</div>
-</div>
+<div class="card">
+<img src="memory2.jpg" onclick="this.style.width='400px'">
+<p>فاكره لما كنتي تخليني اسجل ريكورد واغلط ونعيده 😂</p>
 </div>
 
-<div class="card" onclick="flipCard(this)">
-<div class="card-inner">
-<div class="card-front">
-<img src="memory3.jpg" style="width:100%;height:100%;border-radius:15px;">
-</div>
-<div class="card-back">أول بحبك ❤️</div>
-</div>
-</div>
+<div class="card">
+<img src="memory3.jpg" onclick="this.style.width='400px'">
+<p>الناس اللي دخلت حياتنا هتعرف اننا نستحق بعض ❤️</p>
 </div>
 
-<!-- مواقفنا -->
+</div>
+
 <div class="section">
-<h2>😂 مواقفنا</h2>
+<h2>رسالة سرية 🔒</h2>
+<input type="text" id="secretInput" placeholder="اكتب اسم معين">
+<button onclick="checkSecret()">افتح</button>
 
-<div class="card" onclick="flipCard(this)">
-<div class="card-inner">
-<div class="card-front">موقف ضحكتني</div>
-<div class="card-back">
-لما كنا بنخبي مشاعرنا علي بعض ونكتبها ف دفاترنا عشان نقراها بعدين 😂
-</div>
-</div>
+<p id="secretMessage">
+انا بحبك يا روحي ❤️ ومهما حصل هفضل جنبك
+</p>
 </div>
 
-<div class="card" onclick="flipCard(this)">
-<div class="card-inner">
-<div class="card-front">أكتر موقف محرج</div>
-<div class="card-back">
-فاكره لما كنتي بتخليني اعبر عن مشاعري ف ريكوردات وتخليني اغلط واعيد الريكورد تاني ؟ 😅
-</div>
-</div>
-</div>
-
-<div class="card" onclick="flipCard(this)">
-<div class="card-inner">
-<div class="card-front">موقف غير حياتنا</div>
-<div class="card-back">
-الناس الي دخلت حياتنا هنعرفهم اننا نستحق بعض وان حبنا حقيقي ❤️
-</div>
-</div>
-</div>
-</div>
-
-<!-- رسالة سرية -->
 <div class="section">
-<h2>🔐 رسالة سرية</h2>
-<input type="text" id="secretInput" placeholder="اكتبي الاسم">
-<br>
-<button onclick="checkName()">عرض</button>
-
-<div class="secret" id="secretMessage">
-انتي روحي وكل حياتي ❤️
+<h2>ابعتيلي ردك هنا 💬</h2>
+<textarea id="replyText" placeholder="اكتبي رأيك هنا" style="width:80%;height:80px;border-radius:10px;"></textarea>
+<br><br>
+<button onclick="sendWhatsApp()">ابعت واتس</button>
 </div>
 
-<div class="envelope" id="envelope" onclick="openLetter()"></div>
-<div class="letter" id="letter">
-Zahraa انتي الحاجة الوحيدة اللي عمري ما هفرط فيها ❤️
-</div>
 </div>
 
-<!-- واتس -->
-<div class="section">
-<h2>💬 ابعتي ردك هنا</h2>
-<textarea id="whatsappMsg" rows="3" cols="25"></textarea>
-<br>
-<button onclick="sendWhats()">ابعتلي ع الواتس</button>
-</div>
-
-<button onclick="startLove()">اعرفي أنا قد إيه بحبك ♾️</button>
-<div id="loveCounter"></div>
-
-<!-- موسيقى -->
-<audio autoplay loop>
+<audio id="music" autoplay loop>
 <source src="music1.mp3" type="audio/mp3">
 </audio>
 
-<div class="floating" id="floating"></div>
-
 <script>
 
-// كتابة الاسم تدريجياً
-let text="Zahraa";
-let i=0;
-function typeEffect(){
-if(i<text.length){
-document.getElementById("typeName").innerHTML+=text.charAt(i);
-i++;
-setTimeout(typeEffect,150);
-}}
-typeEffect();
-
-function enterSite(){
+/* باسورد */
+function checkPassword(){
+let pass=document.getElementById("passwordInput").value;
+if(pass==="love"){
 document.getElementById("intro").style.display="none";
+document.getElementById("mainContent").style.display="block";
+}else{
+document.getElementById("errorMsg").style.display="block";
+}
 }
 
-function flipCard(card){
-card.classList.toggle("flipped");
-explodeHearts(6);
+/* كروت */
+function showText(card,text){
+card.innerHTML=text;
 }
 
-function checkName(){
-let name=document.getElementById("secretInput").value.trim();
-if(name=="احمد"){
+/* رسالة سرية */
+function checkSecret(){
+let value=document.getElementById("secretInput").value;
+if(value==="احمد"){
 document.getElementById("secretMessage").style.display="block";
-document.getElementById("envelope").style.display="block";
-}
-if(name=="Zahraa"){
-document.body.classList.add("shake");
-setTimeout(()=>document.body.classList.remove("shake"),500);
-explodeHearts(40);
 }
 }
 
-function openLetter(){
-document.getElementById("letter").style.display="block";
-explodeHearts(20);
-}
-
-function sendWhats(){
-let msg=document.getElementById("whatsappMsg").value;
-window.open("https://wa.me/8615268691947?text="+encodeURIComponent(msg));
-}
-
-function startLove(){
-let count=0;
-setInterval(()=>{
-count+=Math.floor(Math.random()*1000);
-document.getElementById("loveCounter").innerHTML="حب لا نهائي: "+count+" ❤️";
-explodeHearts(3);
-},200);
-}
-
-function explodeHearts(num){
-for(let i=0;i<num;i++){
-let heart=document.createElement("span");
-heart.innerHTML="💖";
-heart.style.position="fixed";
-heart.style.left=Math.random()*100+"%";
-heart.style.top=Math.random()*100+"%";
-heart.style.animation="float 2s linear forwards";
-document.body.appendChild(heart);
-setTimeout(()=>heart.remove(),2000);
-}}
-
-function createFloating(){
-let container=document.getElementById("floating");
-for(let i=0;i<25;i++){
-let span=document.createElement("span");
-span.innerHTML=Math.random()>0.5?"❤️":"⭐";
-span.style.left=Math.random()*100+"%";
-span.style.animationDuration=(5+Math.random()*5)+"s";
-container.appendChild(span);
-}}
-createFloating();
-
-// العداد
-let startDate=new Date("2025-04-08T00:00:00");
-let firstYear=new Date("2026-04-08T00:00:00");
-
-function updateCountdown(){
-let now=new Date();
+/* عداد */
+let startDate=new Date("April 8, 2025 00:00:00").getTime();
+setInterval(function(){
+let now=new Date().getTime();
 let diff=now-startDate;
 
 let days=Math.floor(diff/(1000*60*60*24));
@@ -341,23 +198,46 @@ let hours=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
 let minutes=Math.floor((diff%(1000*60*60))/(1000*60));
 let seconds=Math.floor((diff%(1000*60))/1000);
 
-document.getElementById("countdown").innerHTML=
-"مع بعض من 8 أبريل 2025 ❤️<br>"+days+" يوم "+hours+" ساعة "+minutes+" دقيقة "+seconds+" ثانية";
+document.getElementById("counter").innerHTML=
+"عدى: "+days+" يوم "+hours+" ساعة "+minutes+" دقيقة "+seconds+" ثانية ❤️";
+},1000);
 
-let diffYear=firstYear-now;
-if(diffYear>0){
-let d=Math.floor(diffYear/(1000*60*60*24));
-let h=Math.floor((diffYear%(1000*60*60*24))/(1000*60*60));
-let m=Math.floor((diffYear%(1000*60*60))/(1000*60));
-let s=Math.floor((diffYear%(1000*60))/1000);
+/* واتس */
+function sendWhatsApp(){
+let text=document.getElementById("replyText").value;
+let phone="8615268691947";
+window.open("https://wa.me/"+phone+"?text="+encodeURIComponent(text));
+}
 
-document.getElementById("yearCountdown").innerHTML=
-"باقي على أول سنة 🎉<br>"+d+" يوم "+h+" ساعة "+m+" دقيقة "+s+" ثانية";
-}else{
-document.getElementById("celebration").innerHTML="🎉 عدت سنة كاملة ❤️";
-explodeHearts(80);
-}}
-setInterval(updateCountdown,1000);
+/* خلفية قلوب ونجوم */
+let canvas=document.getElementById("bg");
+let ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+for(let i=0;i<50;i++){
+particles.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+size:Math.random()*3+1,
+speed:Math.random()*1+0.5
+});
+}
+
+function animate(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+ctx.fillStyle="white";
+particles.forEach(p=>{
+ctx.beginPath();
+ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+ctx.fill();
+p.y+=p.speed;
+if(p.y>canvas.height) p.y=0;
+});
+requestAnimationFrame(animate);
+}
+animate();
 
 </script>
 
