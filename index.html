@@ -16,156 +16,97 @@ animation:bg 10s ease infinite;
 overflow-x:hidden;
 color:#fff;
 }
-
 @keyframes bg{
 0%{background-position:0% 50%;}
 50%{background-position:100% 50%;}
 100%{background-position:0% 50%;}
 }
 
-/* شاشة الدخول */
 #intro{
 position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:black;
-color:white;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
+width:100%;height:100%;
+background:black;color:white;
+display:flex;flex-direction:column;
+align-items:center;justify-content:center;
 z-index:9999;
-}
-
-#intro h1{
-font-size:40px;
-letter-spacing:3px;
 }
 
 button{
 padding:10px 20px;
-border:none;
-border-radius:20px;
-background:#ff4b5c;
-color:white;
-font-size:16px;
-cursor:pointer;
-margin-top:15px;
+border:none;border-radius:20px;
+background:#ff4b5c;color:white;
+font-size:16px;cursor:pointer;
+margin-top:10px;
 }
 
 .section{margin:40px 0;}
 
 img.top-img{
-width:220px;
-border-radius:20px;
+width:220px;border-radius:20px;
 box-shadow:0 0 20px #fff;
 margin:20px 0;
 }
 
 .card{
-width:260px;
-height:200px;
+width:260px;height:200px;
 margin:20px auto;
 perspective:1000px;
 cursor:pointer;
 }
-
 .card-inner{
 position:relative;
-width:100%;
-height:100%;
+width:100%;height:100%;
 transition:transform 0.8s;
 transform-style:preserve-3d;
 }
-
 .card.flipped .card-inner{
 transform:rotateY(180deg);
 }
-
 .card-front,.card-back{
 position:absolute;
-width:100%;
-height:100%;
+width:100%;height:100%;
 backface-visibility:hidden;
 border-radius:15px;
-display:flex;
-align-items:center;
+display:flex;align-items:center;
 justify-content:center;
 padding:15px;
 box-shadow:0 0 15px rgba(0,0,0,0.3);
 }
-
 .card-front{background:#ffffff22;}
 .card-back{
 background:#ff4b5c;
 transform:rotateY(180deg);
 }
 
-.secret{
-display:none;
-margin-top:20px;
-font-size:18px;
-color:yellow;
-}
+.secret{display:none;margin-top:15px;color:yellow;}
 
 .envelope{
-width:200px;
-height:120px;
-background:#fff;
-margin:20px auto;
-position:relative;
-display:none;
-cursor:pointer;
-}
-
-.envelope:before{
-content:"";
-position:absolute;
-top:0;
-left:0;
-width:0;
-height:0;
-border-left:100px solid transparent;
-border-right:100px solid transparent;
-border-bottom:60px solid #ff4b5c;
+width:200px;height:120px;
+background:white;margin:20px auto;
+display:none;cursor:pointer;
 }
 
 .letter{
-display:none;
-background:white;
-color:black;
-padding:15px;
-margin-top:10px;
-border-radius:10px;
+display:none;background:white;
+color:black;padding:15px;
+border-radius:10px;margin-top:10px;
 }
 
 .floating{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-pointer-events:none;
-overflow:hidden;
+position:fixed;top:0;left:0;
+width:100%;height:100%;
+pointer-events:none;overflow:hidden;
 }
-
 .floating span{
-position:absolute;
-font-size:20px;
+position:absolute;font-size:20px;
 animation:float 10s linear infinite;
 }
-
 @keyframes float{
 0%{transform:translateY(100vh);}
 100%{transform:translateY(-10vh);}
 }
 
-.shake{
-animation:shake 0.5s;
-}
-
+.shake{animation:shake 0.5s;}
 @keyframes shake{
 0%{transform:translateX(0);}
 25%{transform:translateX(-10px);}
@@ -173,16 +114,12 @@ animation:shake 0.5s;
 75%{transform:translateX(-10px);}
 100%{transform:translateX(0);}
 }
-
-#loveCounter{
-font-size:22px;
-margin-top:20px;
-}
 </style>
 </head>
 
 <body>
 
+<!-- شاشة الدخول -->
 <div id="intro">
 <h1 id="typeName"></h1>
 <button onclick="enterSite()">ادخل ❤️</button>
@@ -196,37 +133,87 @@ margin-top:20px;
 <div id="yearCountdown"></div>
 <div id="celebration"></div>
 
+<!-- كلام ليكي -->
+<div class="section">
+<h2>💌 كلام ليكي</h2>
+
+<div class="card" onclick="flipCard(this)">
+<div class="card-inner">
+<div class="card-front">اضغطي هنا</div>
+<div class="card-back">انتي أجمل حاجة حصلتلي ❤️</div>
+</div>
+</div>
+
+<div class="card" onclick="flipCard(this)">
+<div class="card-inner">
+<div class="card-front">اضغطي هنا</div>
+<div class="card-back">وجودك في حياتي نعمة 💕</div>
+</div>
+</div>
+</div>
+
+<!-- ذكرياتنا -->
+<div class="section">
+<h2>📸 ذكرياتنا</h2>
+
+<div class="card" onclick="flipCard(this)">
+<div class="card-inner">
+<div class="card-front">
+<img src="memory1.jpg" style="width:100%;height:100%;border-radius:15px;">
+</div>
+<div class="card-back">أول صورة لينا ❤️</div>
+</div>
+</div>
+
+<div class="card" onclick="flipCard(this)">
+<div class="card-inner">
+<div class="card-front">
+<img src="memory2.jpg" style="width:100%;height:100%;border-radius:15px;">
+</div>
+<div class="card-back">ضحكتنا سوا 😂💕</div>
+</div>
+</div>
+
+<div class="card" onclick="flipCard(this)">
+<div class="card-inner">
+<div class="card-front">
+<img src="memory3.jpg" style="width:100%;height:100%;border-radius:15px;">
+</div>
+<div class="card-back">أول بحبك ❤️</div>
+</div>
+</div>
+</div>
+
 <!-- مواقفنا -->
 <div class="section">
-<h2>😂 مواقفنا المضحكة</h2>
+<h2>😂 مواقفنا</h2>
 
 <div class="card" onclick="flipCard(this)">
 <div class="card-inner">
-<div class="card-front">موقف ضحكتني ❤️</div>
+<div class="card-front">موقف ضحكتني</div>
 <div class="card-back">
-لما كنا بنخبي مشاعرنا علي بعض ونكتبها ف دفاترنا عشان نقراها بعدين 🥹😂
-</div>
-</div>
-</div>
-
-<div class="card" onclick="flipCard(this)">
-<div class="card-inner">
-<div class="card-front">أكتر موقف محرج 😅</div>
-<div class="card-back">
-فاكره لما كنتي بتخليني اعبر عن مشاعري ف ريكوردات وتخليني اغلط واعيد الريكورد تاني ؟ 😂
+لما كنا بنخبي مشاعرنا علي بعض ونكتبها ف دفاترنا عشان نقراها بعدين 😂
 </div>
 </div>
 </div>
 
 <div class="card" onclick="flipCard(this)">
 <div class="card-inner">
-<div class="card-front">موقف غير حياتنا ❤️</div>
+<div class="card-front">أكتر موقف محرج</div>
 <div class="card-back">
-الناس الي دخلت ف حياتنا دي هنعرفهم اننا نستحق بعض وان حبنا حقيقي صح ي روحي ؟ 👑❤️
+فاكره لما كنتي بتخليني اعبر عن مشاعري ف ريكوردات وتخليني اغلط واعيد الريكورد تاني ؟ 😅
 </div>
 </div>
 </div>
 
+<div class="card" onclick="flipCard(this)">
+<div class="card-inner">
+<div class="card-front">موقف غير حياتنا</div>
+<div class="card-back">
+الناس الي دخلت حياتنا هنعرفهم اننا نستحق بعض وان حبنا حقيقي ❤️
+</div>
+</div>
+</div>
 </div>
 
 <!-- رسالة سرية -->
@@ -237,7 +224,7 @@ margin-top:20px;
 <button onclick="checkName()">عرض</button>
 
 <div class="secret" id="secretMessage">
-انتي روحي وكل حياتي ❤️🔥
+انتي روحي وكل حياتي ❤️
 </div>
 
 <div class="envelope" id="envelope" onclick="openLetter()"></div>
@@ -246,9 +233,18 @@ Zahraa انتي الحاجة الوحيدة اللي عمري ما هفرط في
 </div>
 </div>
 
+<!-- واتس -->
+<div class="section">
+<h2>💬 ابعتي ردك هنا</h2>
+<textarea id="whatsappMsg" rows="3" cols="25"></textarea>
+<br>
+<button onclick="sendWhats()">ابعتلي ع الواتس</button>
+</div>
+
 <button onclick="startLove()">اعرفي أنا قد إيه بحبك ♾️</button>
 <div id="loveCounter"></div>
 
+<!-- موسيقى -->
 <audio autoplay loop>
 <source src="music1.mp3" type="audio/mp3">
 </audio>
@@ -265,8 +261,7 @@ if(i<text.length){
 document.getElementById("typeName").innerHTML+=text.charAt(i);
 i++;
 setTimeout(typeEffect,150);
-}
-}
+}}
 typeEffect();
 
 function enterSite(){
@@ -280,12 +275,10 @@ explodeHearts(6);
 
 function checkName(){
 let name=document.getElementById("secretInput").value.trim();
-
 if(name=="احمد"){
 document.getElementById("secretMessage").style.display="block";
 document.getElementById("envelope").style.display="block";
 }
-
 if(name=="Zahraa"){
 document.body.classList.add("shake");
 setTimeout(()=>document.body.classList.remove("shake"),500);
@@ -298,9 +291,14 @@ document.getElementById("letter").style.display="block";
 explodeHearts(20);
 }
 
+function sendWhats(){
+let msg=document.getElementById("whatsappMsg").value;
+window.open("https://wa.me/8615268691947?text="+encodeURIComponent(msg));
+}
+
 function startLove(){
 let count=0;
-let interval=setInterval(()=>{
+setInterval(()=>{
 count+=Math.floor(Math.random()*1000);
 document.getElementById("loveCounter").innerHTML="حب لا نهائي: "+count+" ❤️";
 explodeHearts(3);
@@ -314,12 +312,10 @@ heart.innerHTML="💖";
 heart.style.position="fixed";
 heart.style.left=Math.random()*100+"%";
 heart.style.top=Math.random()*100+"%";
-heart.style.fontSize="20px";
 heart.style.animation="float 2s linear forwards";
 document.body.appendChild(heart);
 setTimeout(()=>heart.remove(),2000);
-}
-}
+}}
 
 function createFloating(){
 let container=document.getElementById("floating");
@@ -329,11 +325,10 @@ span.innerHTML=Math.random()>0.5?"❤️":"⭐";
 span.style.left=Math.random()*100+"%";
 span.style.animationDuration=(5+Math.random()*5)+"s";
 container.appendChild(span);
-}
-}
+}}
 createFloating();
 
-// عداد العلاقة
+// العداد
 let startDate=new Date("2025-04-08T00:00:00");
 let firstYear=new Date("2026-04-08T00:00:00");
 
@@ -350,7 +345,6 @@ document.getElementById("countdown").innerHTML=
 "مع بعض من 8 أبريل 2025 ❤️<br>"+days+" يوم "+hours+" ساعة "+minutes+" دقيقة "+seconds+" ثانية";
 
 let diffYear=firstYear-now;
-
 if(diffYear>0){
 let d=Math.floor(diffYear/(1000*60*60*24));
 let h=Math.floor((diffYear%(1000*60*60*24))/(1000*60*60));
@@ -362,9 +356,7 @@ document.getElementById("yearCountdown").innerHTML=
 }else{
 document.getElementById("celebration").innerHTML="🎉 عدت سنة كاملة ❤️";
 explodeHearts(80);
-}
-}
-
+}}
 setInterval(updateCountdown,1000);
 
 </script>
