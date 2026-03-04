@@ -8,13 +8,13 @@
 body{
 margin:0;
 font-family:Arial;
-background:linear-gradient(45deg,#0f2027,#203a43,#2c5364);
+background:linear-gradient(45deg,#141e30,#243b55);
 color:white;
 text-align:center;
 overflow-x:hidden;
 }
 
-/* خلفية متحركة */
+/* خلفية نجوم */
 canvas{
 position:fixed;
 top:0;
@@ -31,7 +31,7 @@ justify-content:center;
 align-items:center;
 }
 
-input{
+input, textarea{
 padding:10px;
 border-radius:10px;
 border:none;
@@ -49,7 +49,7 @@ font-size:16px;
 }
 
 .section{
-margin-top:50px;
+margin-top:60px;
 }
 
 .card{
@@ -67,22 +67,59 @@ background:rgba(255,255,255,0.3);
 transform:scale(1.05);
 }
 
-img{
-width:250px;
+img.main-img{
+width:260px;
 border-radius:15px;
-margin:10px;
-cursor:pointer;
-transition:0.3s;
+margin:20px;
 }
 
-img:hover{
-transform:scale(1.1);
+/* 3D Memory Cards */
+.memory-card{
+width:260px;
+height:320px;
+perspective:1000px;
+margin:20px auto;
+}
+
+.memory-inner{
+position:relative;
+width:100%;
+height:100%;
+transition:transform 0.8s;
+transform-style:preserve-3d;
+}
+
+.memory-card:hover .memory-inner{
+transform:rotateY(180deg);
+}
+
+.memory-front, .memory-back{
+position:absolute;
+width:100%;
+height:100%;
+backface-visibility:hidden;
+border-radius:15px;
+}
+
+.memory-front img{
+width:100%;
+height:100%;
+border-radius:15px;
+}
+
+.memory-back{
+background:rgba(255,255,255,0.2);
+display:flex;
+align-items:center;
+justify-content:center;
+transform:rotateY(180deg);
+padding:15px;
 }
 
 #secretMessage{
 display:none;
 margin-top:20px;
-color:#ffcccb;
+color:#ffb3c6;
 font-size:18px;
 }
 
@@ -100,58 +137,78 @@ font-size:18px;
 <p id="errorMsg" style="display:none;color:red;">الباسورد غلط 😅</p>
 </div>
 
-<!-- الموقع -->
+<!-- المحتوى -->
 <div id="mainContent" style="display:none;">
 
 <h1>Zahraa ❤️</h1>
 
-<img src="love1.jpg">
+<img src="love1.jpg" class="main-img">
 
 <h2 id="counter"></h2>
 
+<!-- كروت الكلام -->
 <div class="section">
 <h2>كلام من قلبي ليكي 💌</h2>
 
-<div class="card" onclick="showText(this,'انتي احلى حاجة حصلتلي ❤️')">اضغطي هنا</div>
-<div class="card" onclick="showText(this,'وجودك جمبي أمان ❤️')">اضغطي هنا</div>
+<div class="card" onclick="showText(this,'انتي اجمل حاجة حصلتلي ❤️')">اضغطي هنا</div>
+<div class="card" onclick="showText(this,'وجودك جمبي بيطمني ❤️')">اضغطي هنا</div>
 <div class="card" onclick="showText(this,'مهما حصل انا معاكي ❤️')">اضغطي هنا</div>
-
 </div>
 
+<!-- الذكريات 3D -->
 <div class="section">
 <h2>ذكرياتنا 📸</h2>
 
-<div class="card">
-<img src="memory1.jpg" onclick="this.style.width='400px'">
-<p>لما كنا بنخبي مشاعرنا ونكتبها في دفاترنا ❤️</p>
+<div class="memory-card">
+  <div class="memory-inner">
+    <div class="memory-front">
+      <img src="memory1.jpg">
+    </div>
+    <div class="memory-back">
+      لما كنا بنخبي مشاعرنا ونكتبها في دفاترنا ❤️
+    </div>
+  </div>
 </div>
 
-<div class="card">
-<img src="memory2.jpg" onclick="this.style.width='400px'">
-<p>فاكره لما كنتي تخليني اسجل ريكورد واغلط ونعيده 😂</p>
+<div class="memory-card">
+  <div class="memory-inner">
+    <div class="memory-front">
+      <img src="memory2.jpg">
+    </div>
+    <div class="memory-back">
+      فاكره الريكوردات اللي كنتي تخليني اعيدها 😂
+    </div>
+  </div>
 </div>
 
-<div class="card">
-<img src="memory3.jpg" onclick="this.style.width='400px'">
-<p>الناس اللي دخلت حياتنا هتعرف اننا نستحق بعض ❤️</p>
+<div class="memory-card">
+  <div class="memory-inner">
+    <div class="memory-front">
+      <img src="memory3.jpg">
+    </div>
+    <div class="memory-back">
+      الناس هتعرف ان حبنا حقيقي ❤️
+    </div>
+  </div>
 </div>
 
 </div>
 
+<!-- رسالة سرية -->
 <div class="section">
 <h2>رسالة سرية 🔒</h2>
 <input type="text" id="secretInput" placeholder="اكتب اسم معين">
 <button onclick="checkSecret()">افتح</button>
-
 <p id="secretMessage">
-انا بحبك يا روحي ❤️ ومهما حصل هفضل جنبك
+انا بحبك يا روحي ومش هسيبك ابداً ❤️
 </p>
 </div>
 
+<!-- واتس -->
 <div class="section">
 <h2>ابعتيلي ردك هنا 💬</h2>
-<textarea id="replyText" placeholder="اكتبي رأيك هنا" style="width:80%;height:80px;border-radius:10px;"></textarea>
-<br><br>
+<textarea id="replyText" placeholder="اكتبي رأيك هنا" style="width:80%;height:80px;"></textarea>
+<br>
 <button onclick="sendWhatsApp()">ابعت واتس</button>
 </div>
 
@@ -209,31 +266,31 @@ let phone="8615268691947";
 window.open("https://wa.me/"+phone+"?text="+encodeURIComponent(text));
 }
 
-/* خلفية قلوب ونجوم */
+/* خلفية نجوم */
 let canvas=document.getElementById("bg");
 let ctx=canvas.getContext("2d");
 canvas.width=window.innerWidth;
 canvas.height=window.innerHeight;
 
-let particles=[];
-for(let i=0;i<50;i++){
-particles.push({
+let stars=[];
+for(let i=0;i<70;i++){
+stars.push({
 x:Math.random()*canvas.width,
 y:Math.random()*canvas.height,
-size:Math.random()*3+1,
-speed:Math.random()*1+0.5
+size:Math.random()*2+1,
+speed:Math.random()*1+0.3
 });
 }
 
 function animate(){
 ctx.clearRect(0,0,canvas.width,canvas.height);
 ctx.fillStyle="white";
-particles.forEach(p=>{
+stars.forEach(s=>{
 ctx.beginPath();
-ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+ctx.arc(s.x,s.y,s.size,0,Math.PI*2);
 ctx.fill();
-p.y+=p.speed;
-if(p.y>canvas.height) p.y=0;
+s.y+=s.speed;
+if(s.y>canvas.height) s.y=0;
 });
 requestAnimationFrame(animate);
 }
