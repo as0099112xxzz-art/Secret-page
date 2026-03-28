@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <title>Zahraa ❤️</title>
 
+<script src="https://cdn.jsdelivr.net/npm/js-sha256"></script>
+
 <style>
 body{
 margin:0;
@@ -21,227 +23,139 @@ left:0;
 z-index:-1;
 }
 
-#intro{
-height:100vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-}
-
-input, textarea{
-padding:10px;
-border-radius:10px;
-border:none;
-margin:10px;
-}
+.section{margin-top:60px;}
 
 button{
 padding:10px 20px;
 border:none;
 border-radius:20px;
-cursor:pointer;
 background:#ff4d6d;
 color:white;
-font-size:16px;
+margin:5px;
 cursor:pointer;
 }
 
-.section{
-margin-top:60px;
-}
-
-.card{
-background:rgba(255,255,255,0.1);
-margin:15px auto;
-padding:20px;
-border-radius:15px;
-width:80%;
-cursor:pointer;
-transition:0.3s;
-}
-
-.card:hover{
-background:rgba(255,255,255,0.3);
-transform:scale(1.05);
-}
-
-.main-img{
-width:260px;
-border-radius:15px;
-margin:20px;
-}
-
-/* 3D Memories */
-.memory-card{
-width:260px;
-height:320px;
-perspective:1000px;
-margin:20px auto;
-}
-
-.memory-inner{
-position:relative;
+/* cinematic */
+#cinemaOverlay{
+position:fixed;
+top:0;
+left:0;
 width:100%;
 height:100%;
-transition:transform 0.8s;
-transform-style:preserve-3d;
+background:black;
+opacity:0;
+pointer-events:none;
+transition:0.4s;
+z-index:999;
 }
 
-.memory-card:hover .memory-inner{
-transform:rotateY(180deg);
+.glitch{
+animation:glitch 0.3s infinite;
 }
 
-.memory-front, .memory-back{
-position:absolute;
-width:100%;
-height:100%;
-backface-visibility:hidden;
-border-radius:15px;
-}
-
-.memory-front img{
-width:100%;
-height:100%;
-border-radius:15px;
-}
-
-.memory-back{
-background:rgba(255,255,255,0.2);
-display:flex;
-align-items:center;
-justify-content:center;
-transform:rotateY(180deg);
-padding:15px;
-}
-
-#secretMessage{
-display:none;
-margin-top:20px;
-color:#ffb3c6;
-font-size:18px;
+@keyframes glitch{
+0%{transform:translate(1px,1px);}
+50%{transform:translate(-1px,-1px);}
+100%{transform:translate(1px,-1px);}
 }
 </style>
 </head>
+
 <body>
 
+<div id="cinemaOverlay"></div>
 <canvas id="bg"></canvas>
 
-<!-- شاشة الدخول -->
+<!-- LOGIN -->
 <div id="intro">
 <h1>اكتب الباسورد ❤️</h1>
-<input type="password" id="passwordInput" placeholder="الباسورد">
+<input type="password" id="passwordInput">
 <button onclick="checkPassword()">ادخل</button>
-<p id="errorMsg" style="display:none;color:red;">الباسورد غلط 😅</p>
+<p id="errorMsg" style="display:none;color:red;">غلط 😅</p>
 </div>
 
-<!-- المحتوى -->
+<!-- MAIN -->
 <div id="mainContent" style="display:none;">
 
 <h1>Zahraa ❤️</h1>
 
-<img src="love1.jpg" class="main-img">
+<button onclick="toggleMusic()">🎵</button>
 
+<!-- COUNTERS -->
 <h2 id="counter"></h2>
 <h2 id="countdownYear"></h2>
 
+<!-- QUIZ -->
 <div class="section">
-<h2>كلام من قلبي ليكي 💌</h2>
-<div class="card" onclick="showText(this,'انتي اجمل حاجة حصلتلي ❤️')">اضغطي هنا</div>
-<div class="card" onclick="showText(this,'وجودك جمبي بيطمني ❤️')">اضغطي هنا</div>
-<div class="card" onclick="showText(this,'مهما حصل انا معاكي ❤️')">اضغطي هنا</div>
+<h2>اختبار حبنا 😏❤️</h2>
+
+<div id="quizBox">
+<p id="level">Level 1</p>
+<p id="question">ابدأ 😎</p>
+<div id="answers"></div>
+<p id="timer"></p>
+
+<button onclick="startGame()">ابدأ اللعبة</button>
 </div>
 
-<div class="section">
-<h2>ذكرياتنا 📸</h2>
-
-<div class="memory-card">
-<div class="memory-inner">
-<div class="memory-front">
-<img src="memory1.jpg">
-</div>
-<div class="memory-back">
-لما كنا بنخبي مشاعرنا ونكتبها في دفاترنا ❤️
-</div>
-</div>
-</div>
-
-<div class="memory-card">
-<div class="memory-inner">
-<div class="memory-front">
-<img src="memory2.jpg">
-</div>
-<div class="memory-back">
-فاكره الريكوردات اللي كنتي تخليني اعيدها 😂
-</div>
-</div>
-</div>
-
-<div class="memory-card">
-<div class="memory-inner">
-<div class="memory-front">
-<img src="memory3.jpg">
-</div>
-<div class="memory-back">
-الناس هتعرف ان حبنا حقيقي ❤️
-</div>
-</div>
-</div>
+<p id="quizResult"></p>
 
 </div>
 
-<div class="section">
-<h2>رسالة سرية 🔒</h2>
-<input type="text" id="secretInput" placeholder="اكتب اسم معين">
-<button onclick="checkSecret()">افتح</button>
-<p id="secretMessage">
-انا بحبك يا روحي ومش هسيبك ابداً ❤️
+<!-- FINAL SURPRISE -->
+<div id="finalSection" style="display:none;margin-top:40px;">
+<h2>💌 رسالة ليكي</h2>
+
+<p>
+انتي مش بس حبيبتي… انتي راحتي واماني وكل حاجة حلوة في حياتي ❤️  
+وكل يوم معاكي بيخليني احبك اكتر من اليوم اللي قبله ❤️  
+ولو رجع بيا الزمن مليون مرة… هختارك انتي برضه ❤️  
 </p>
-</div>
 
-<div class="section">
-<h2>ابعتيلي ردك هنا 💬</h2>
-<textarea id="replyText" placeholder="اكتبي رأيك هنا" style="width:80%;height:80px;"></textarea>
-<br>
-<button onclick="sendWhatsApp()">ابعت واتس</button>
+<video width="300" controls>
+<source src="surprise.mp4" type="video/mp4">
+</video>
 </div>
 
 </div>
 
-<!-- الصوت -->
-<audio id="music" loop preload="auto">
-<source src="music1.mp3" type="audio/mp3">
+<!-- AUDIO -->
+<audio id="music" loop>
+<source src="music.mp3">
+</audio>
+
+<audio id="clickSound">
+<source src="https://www.soundjay.com/buttons/sounds/button-16.mp3">
 </audio>
 
 <script>
 
-/* دخول */
+/* PASSWORD */
 function checkPassword(){
 let pass=document.getElementById("passwordInput").value;
 
-if(pass==="love"){
+if(sha256(pass)==="2c1743a391305fbf367df8e4f069f9f9"){
 document.getElementById("intro").style.display="none";
 document.getElementById("mainContent").style.display="block";
-
-/* تشغيل الصوت */
-let audio=document.getElementById("music");
-audio.play().catch(()=>{});
-
-/* بدء العدادات */
 startCounters();
-
 }else{
 document.getElementById("errorMsg").style.display="block";
 }
 }
 
-/* العدادات */
+/* MUSIC */
+function toggleMusic(){
+let a=document.getElementById("music");
+a.paused?a.play():a.pause();
+}
+
+/* COUNTERS */
 function startCounters(){
 
-let startDate=new Date(2025,3,8,0,0,0).getTime();
-let firstYear=new Date(2026,3,8,0,0,0).getTime();
+let startDate=new Date(2025,3,8).getTime();
+let firstYear=new Date(2026,3,8).getTime();
 
-setInterval(function(){
+setInterval(()=>{
 
 let now=new Date().getTime();
 
@@ -249,81 +163,132 @@ let diff=now-startDate;
 
 let days=Math.floor(diff/(1000*60*60*24));
 let hours=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
-let minutes=Math.floor((diff%(1000*60*60))/(1000*60));
-let seconds=Math.floor((diff%(1000*60))/1000);
 
 document.getElementById("counter").innerHTML=
-"احنا بقالنا: "+days+" يوم "+hours+" ساعة "+minutes+" دقيقة "+seconds+" ثانية ❤️";
+"احنا بقالنا: "+days+" يوم "+hours+" ساعة ❤️";
 
 let remaining=firstYear-now;
 
 if(remaining>0){
-
 let rDays=Math.floor(remaining/(1000*60*60*24));
-let rHours=Math.floor((remaining%(1000*60*60*24))/(1000*60*60));
-let rMinutes=Math.floor((remaining%(1000*60*60))/(1000*60));
-let rSeconds=Math.floor((remaining%(1000*60))/1000);
-
 document.getElementById("countdownYear").innerHTML=
-"فاضل على أول سنة لينا: "+rDays+" يوم "+rHours+" ساعة "+rMinutes+" دقيقة "+rSeconds+" ثانية 🎉";
-
+"فاضل "+rDays+" يوم ❤️";
 }else{
-document.getElementById("countdownYear").innerHTML=
-"عدت أول سنة حب واحنا أقوى من أي وقت ❤️🎉";
+document.getElementById("countdownYear").innerHTML="عدت سنة حب ❤️";
 }
 
 },1000);
 }
 
-/* كروت */
-function showText(card,text){
-card.innerHTML=text;
+/* QUESTIONS RANDOM */
+let allQuestions=[
+{q:"أنا ايه بالنسبالك؟",a:["كل حاجة","عادي","مش مهم"],c:0},
+{q:"لو زعلنا؟",a:["أصالحك","أسيبك","أطنش"],c:0},
+{q:"بتحبيني؟",a:["آه جدًا","شوية","لا 😂"],c:0},
+{q:"نكمل؟",a:["لحد الآخر","مش عارفه","لا"],c:0},
+{q:"أنا وحش؟",a:["لا ❤️","آه 😂","ممكن"],c:0}
+];
+
+function getRandomQuestions(){
+return allQuestions.sort(()=>0.5-Math.random()).slice(0,3);
 }
 
-/* رسالة سرية */
-function checkSecret(){
-let value=document.getElementById("secretInput").value;
-if(value==="احمد"){
-document.getElementById("secretMessage").style.display="block";
-}
+/* GAME */
+let level=1;
+let current=0;
+let questions=[];
+let timerInterval;
+let timeLeft=10;
+
+function startGame(){
+level=1;
+questions=getRandomQuestions();
+current=0;
+nextQ();
 }
 
-/* واتس */
-function sendWhatsApp(){
-let text=document.getElementById("replyText").value;
-let phone="8615268691947";
-window.open("https://wa.me/"+phone+"?text="+encodeURIComponent(text));
+function nextQ(){
+
+if(current>=questions.length){
+level++;
+
+if(level>3){
+winGame();
+return;
 }
 
-/* خلفية نجوم */
-let canvas=document.getElementById("bg");
-let ctx=canvas.getContext("2d");
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
+questions=getRandomQuestions();
+current=0;
+}
 
-let stars=[];
-for(let i=0;i<70;i++){
-stars.push({
-x:Math.random()*canvas.width,
-y:Math.random()*canvas.height,
-size:Math.random()*2+1,
-speed:Math.random()*1+0.3
+document.getElementById("level").innerText="Level "+level;
+
+let q=questions[current];
+document.getElementById("question").innerText=q.q;
+
+let ansDiv=document.getElementById("answers");
+ansDiv.innerHTML="";
+
+q.a.forEach((ans,i)=>{
+let btn=document.createElement("button");
+btn.innerText=ans;
+btn.onclick=()=>selectAns(i);
+ansDiv.appendChild(btn);
 });
+
+startTimer();
 }
 
-function animate(){
-ctx.clearRect(0,0,canvas.width,canvas.height);
-ctx.fillStyle="white";
-stars.forEach(s=>{
-ctx.beginPath();
-ctx.arc(s.x,s.y,s.size,0,Math.PI*2);
-ctx.fill();
-s.y+=s.speed;
-if(s.y>canvas.height) s.y=0;
-});
-requestAnimationFrame(animate);
+/* TIMER */
+function startTimer(){
+timeLeft=10;
+document.getElementById("timer").innerText="⏳ "+timeLeft;
+
+timerInterval=setInterval(()=>{
+timeLeft--;
+
+document.getElementById("timer").innerText="⏳ "+timeLeft;
+
+if(timeLeft<=0){
+clearInterval(timerInterval);
+lose();
 }
-animate();
+},1000);
+}
+
+/* EFFECT */
+function cinematic(){
+let o=document.getElementById("cinemaOverlay");
+o.style.opacity="0.7";
+setTimeout(()=>o.style.opacity="0",300);
+}
+
+/* ANSWER */
+function selectAns(i){
+clearInterval(timerInterval);
+document.getElementById("clickSound").play();
+cinematic();
+
+if(i!==questions[current].c){
+lose();
+return;
+}
+
+current++;
+setTimeout(nextQ,500);
+}
+
+/* WIN */
+function winGame(){
+document.getElementById("quizResult").innerText="كسبتي كل الليفلات 😳❤️🔥";
+document.getElementById("finalSection").style.display="block";
+}
+
+/* LOSE */
+function lose(){
+document.getElementById("quizResult").innerText="خسرتي 😈 جربي تاني";
+document.getElementById("question").classList.add("glitch");
+}
 
 </script>
 
