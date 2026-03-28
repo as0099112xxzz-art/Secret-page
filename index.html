@@ -223,19 +223,24 @@ button{
 /* Password + Loader */
 let loadingMessages=["استني بس ثواني ي روحي…","قلبك دايمًا معايا ❤️","هيا بينا لمغامرتنا 😎","لحظة حلوة قربت تظهر 💖"];
 function checkPassword(){
-  let pass = document.getElementById("passwordInput").value.trim().toLowerCase(); // حذف الفراغات وتحويل للصغير
+  let pass = document.getElementById("passwordInput").value.trim().toLowerCase();
+  let errorMsg = document.getElementById("errorMsg");
+  errorMsg.style.display = "none";
+
   if(pass === "love"){
-    document.getElementById("intro").style.display = "none";
-    document.getElementById("loadingText").innerText = loadingMessages[Math.floor(Math.random()*loadingMessages.length)];
-    document.getElementById("loadingScreen").style.display = "flex";
+    let loadingScreen = document.getElementById("loadingScreen");
+    let loadingText = document.getElementById("loadingText");
+    loadingText.innerText = loadingMessages[Math.floor(Math.random()*loadingMessages.length)];
+    loadingScreen.style.display = "flex";
+
     setTimeout(()=>{
-      document.getElementById("loadingScreen").style.display = "none";
+      loadingScreen.style.display = "none";
       document.getElementById("mainContent").style.display = "block";
-      document.getElementById("music").play().catch(()=>{});
+      document.getElementById("music").play().catch(()=>{console.log("الصوت لم يبدأ تلقائيًا");});
       startCounters();
     },3000);
   } else {
-    document.getElementById("errorMsg").style.display = "block";
+    errorMsg.style.display = "block";
   }
 }
 
@@ -318,7 +323,7 @@ function startConfetti(){
   }
 }
 
-/* فتح صفحة أشعار مع Typing Animation */
+/* صفحة الأشعار */
 function openPoemPage(){
   let newWindow = window.open("", "_blank");
   newWindow.document.write(`
