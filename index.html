@@ -223,18 +223,20 @@ button{
 /* Password + Loader */
 let loadingMessages=["استني بس ثواني ي روحي…","قلبك دايمًا معايا ❤️","هيا بينا لمغامرتنا 😎","لحظة حلوة قربت تظهر 💖"];
 function checkPassword(){
-  let pass=document.getElementById("passwordInput").value;
-  if(pass==="love"){
-    document.getElementById("intro").style.display="none";
-    document.getElementById("loadingText").innerText=loadingMessages[Math.floor(Math.random()*loadingMessages.length)];
-    document.getElementById("loadingScreen").style.display="flex";
+  let pass = document.getElementById("passwordInput").value.trim().toLowerCase(); // حذف الفراغات وتحويل للصغير
+  if(pass === "love"){
+    document.getElementById("intro").style.display = "none";
+    document.getElementById("loadingText").innerText = loadingMessages[Math.floor(Math.random()*loadingMessages.length)];
+    document.getElementById("loadingScreen").style.display = "flex";
     setTimeout(()=>{
-      document.getElementById("loadingScreen").style.display="none";
-      document.getElementById("mainContent").style.display="block";
+      document.getElementById("loadingScreen").style.display = "none";
+      document.getElementById("mainContent").style.display = "block";
       document.getElementById("music").play().catch(()=>{});
       startCounters();
     },3000);
-  } else document.getElementById("errorMsg").style.display="block";
+  } else {
+    document.getElementById("errorMsg").style.display = "block";
+  }
 }
 
 /* Counters */
@@ -271,7 +273,7 @@ function showText(card,text){card.innerHTML=text;}
 
 /* Secret */
 function checkSecret(){
-  let value=document.getElementById("secretInput").value;
+  let value=document.getElementById("secretInput").value.trim().toLowerCase();
   if(value==="احمد") document.getElementById("secretMessage").style.display="block";
 }
 
@@ -344,7 +346,6 @@ function openPoemPage(){
         ];
         const container = document.getElementById('poems');
         let i = 0;
-
         function showPoem(index){
           const p = document.createElement('p');
           container.appendChild(p);
@@ -362,7 +363,6 @@ function openPoemPage(){
           }
           typeChar();
         }
-
         showPoem(0);
       </script>
     </body>
