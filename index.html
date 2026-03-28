@@ -80,7 +80,6 @@ button{
   border-radius:15px;
   margin:20px;
 }
-/* 3D Memories */
 .memory-card{
   width:260px;
   height:320px;
@@ -143,21 +142,18 @@ button{
 <body>
 <canvas id="bg"></canvas>
 
-<!-- شاشة الدخول -->
 <div id="intro">
   <h1>اكتب الباسورد ❤️</h1>
   <input type="password" id="passwordInput" placeholder="الباسورد">
-  <button onclick="checkPassword()">ادخل</button>
+  <button id="enterBtn">ادخل</button>
   <p id="errorMsg" style="display:none;color:red;">الباسورد غلط 😅</p>
 </div>
 
-<!-- شاشة التحميل -->
 <div id="loadingScreen">
   <p id="loadingText">استني بس ثواني ي روحي…</p>
   <div class="loader"></div>
 </div>
 
-<!-- المحتوى الرئيسي -->
 <div id="mainContent" style="display:none;">
 
 <h1>Zahraa ❤️</h1>
@@ -220,29 +216,39 @@ button{
 </audio>
 
 <script>
-/* Password + Loader */
-let loadingMessages=["استني بس ثواني ي روحي…","قلبك دايمًا معايا ❤️","هيا بينا لمغامرتنا 😎","لحظة حلوة قربت تظهر 💖"];
-function checkPassword(){
-  let pass = document.getElementById("passwordInput").value.trim().toLowerCase();
-  let errorMsg = document.getElementById("errorMsg");
-  errorMsg.style.display = "none";
+document.addEventListener("DOMContentLoaded", function(){
 
-  if(pass === "love"){
-    let loadingScreen = document.getElementById("loadingScreen");
-    let loadingText = document.getElementById("loadingText");
-    loadingText.innerText = loadingMessages[Math.floor(Math.random()*loadingMessages.length)];
-    loadingScreen.style.display = "flex";
+  const passwordInput = document.getElementById("passwordInput");
+  const enterBtn = document.getElementById("enterBtn");
+  const errorMsg = document.getElementById("errorMsg");
+  const loadingScreen = document.getElementById("loadingScreen");
+  const loadingText = document.getElementById("loadingText");
+  const mainContent = document.getElementById("mainContent");
+  const music = document.getElementById("music");
 
-    setTimeout(()=>{
-      loadingScreen.style.display = "none";
-      document.getElementById("mainContent").style.display = "block";
-      document.getElementById("music").play().catch(()=>{console.log("الصوت لم يبدأ تلقائيًا");});
-      startCounters();
-    },3000);
-  } else {
-    errorMsg.style.display = "block";
-  }
-}
+  const loadingMessages=["استني بس ثواني ي روحي…","قلبك دايمًا معايا ❤️","هيا بينا لمغامرتنا 😎","لحظة حلوة قربت تظهر 💖"];
+
+  enterBtn.addEventListener("click", function(){
+    let pass = passwordInput.value.trim().toLowerCase();
+    errorMsg.style.display = "none";
+
+    if(pass === "love"){
+      loadingText.innerText = loadingMessages[Math.floor(Math.random()*loadingMessages.length)];
+      loadingScreen.style.display = "flex";
+
+      setTimeout(()=>{
+        loadingScreen.style.display = "none";
+        mainContent.style.display = "block";
+        music.play().catch(()=>{console.log("الصوت لم يبدأ تلقائيًا");});
+        startCounters();
+      },3000);
+
+    } else {
+      errorMsg.style.display = "block";
+    }
+  });
+
+});
 
 /* Counters */
 let startDate=new Date(2025,3,8).getTime();
