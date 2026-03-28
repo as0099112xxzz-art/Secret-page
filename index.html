@@ -14,8 +14,7 @@ body{
 }
 canvas{
   position:fixed;
-  top:0;
-  left:0;
+  top:0; left:0;
   z-index:-1;
 }
 #loadingScreen{
@@ -43,24 +42,6 @@ canvas{
 @keyframes spin{
   0%{transform:rotate(0deg);}
   100%{transform:rotate(360deg);}
-}
-#cinemaOverlay{
-  position:fixed;
-  width:100%;
-  height:100%;
-  background:black;
-  opacity:0;
-  transition:0.4s;
-  z-index:998;
-  pointer-events:none;
-}
-.glitch{
-  animation:glitch 0.3s infinite;
-}
-@keyframes glitch{
-  0%{transform:translate(1px,1px);}
-  50%{transform:translate(-1px,-1px);}
-  100%{transform:translate(1px,-1px);}
 }
 input, textarea{
   padding:10px;
@@ -142,11 +123,25 @@ button{
   color:#ffb3c6;
   font-size:18px;
 }
+.confetti-piece{
+  position:fixed;
+  width:10px;
+  height:10px;
+  background-color:red;
+  opacity:0.7;
+  z-index:9999;
+  pointer-events:none;
+  border-radius:50%;
+  animation:fall 3s linear forwards;
+}
+@keyframes fall{
+  0%{transform:translateY(0) rotate(0deg);}
+  100%{transform:translateY(100vh) rotate(360deg);}
+}
 </style>
 </head>
 <body>
 <canvas id="bg"></canvas>
-<div id="cinemaOverlay"></div>
 
 <!-- شاشة الدخول -->
 <div id="intro">
@@ -215,33 +210,13 @@ button{
 <button onclick="sendWhatsApp()">ابعت واتس</button>
 </div>
 
-<!-- Quiz -->
 <div class="section">
-<h2>اختبار حبنا 😏❤️</h2>
-<div id="quizBox">
-<p id="level">Level 1</p>
-<p id="question">ابدأ 😎</p>
-<div id="answers"></div>
-<p id="timer"></p>
-<button onclick="startGame()">ابدأ اللعبة</button>
-</div>
-<p id="quizResult"></p>
-</div>
-
-<!-- مفاجأة بعد الفوز -->
-<div id="finalSection" style="display:none;">
-<h2>💌 رسالة ليكي</h2>
-<p>انتي مش بس حبيبتي… انتي كل حاجة حلوة في حياتي ❤️ وكل يوم معاكي بيخليني احبك أكتر ❤️</p>
-<video width="300" controls>
-<source src="surprise.mp4">
-</video>
+<h2>رايحه فين لس مخلصناش 💌</h2>
+<button onclick="openPoemPage()">دوسي هنا</button>
 </div>
 
 <audio id="music" loop>
-<source src="music1.mp3">
-</audio>
-<audio id="clickSound">
-<source src="https://www.soundjay.com/buttons/sounds/button-16.mp3">
+<source src="music.mp3" type="audio/mp3">
 </audio>
 
 <script>
@@ -256,15 +231,10 @@ function checkPassword(){
     setTimeout(()=>{
       document.getElementById("loadingScreen").style.display="none";
       document.getElementById("mainContent").style.display="block";
+      document.getElementById("music").play().catch(()=>{});
       startCounters();
     },3000);
   } else document.getElementById("errorMsg").style.display="block";
-}
-
-/* Music toggle */
-function toggleMusic(){
-  let a=document.getElementById("music");
-  a.paused?a.play():a.pause();
 }
 
 /* Counters */
@@ -291,6 +261,7 @@ function startCounters(){
     } else {
       document.getElementById("countdownYear").innerHTML="عدت أول سنة حب واحنا أقوى من أي وقت ❤️🎉";
       document.getElementById("yearEndMessage").innerText="🎉 كملنا أول سنة حب! كل سنة وأنتي قلبي ❤️";
+      startConfetti();
     }
   },1000);
 }
@@ -311,53 +282,93 @@ function sendWhatsApp(){
   window.open("https://wa.me/"+phone+"?text="+encodeURIComponent(text));
 }
 
-/* Quiz */
-let allQuestions=[
-  {q:"أنا بالنسبالك ايه؟ ❤️",a:["كل حياتي","حبيبي","حد مهم جدًا","كل دول ❤️"],c:3},
-  {q:"لو زعلنا؟ 🥺",a:["أصالحك فورًا","أسيبك","أطنش","أعيط"],c:0},
-  {q:"بتحبيني؟ 😏",a:["آه جدًا","شوية","لا 😂"],c:0},
-  {q:"نكمل؟ ❤️",a:["لحد الآخر","مش عارفه","لا"],c:0},
-  {q:"أنا أولوياتك؟ 😈",a:["الأول ❤️","التاني","التالت","مش عارفه 😂"],c:0}
-];
-function getRandom(){ return allQuestions.sort(()=>0.5-Math.random()).slice(0,3); }
-let level=1, current=0, questions=[], timerInterval, timeLeft=10;
-function startGame(){ level=1; questions=getRandom(); current=0; nextQ(); }
-function nextQ(){
-  if(current>=questions.length){
-    level++;
-    if(level>3){winGame(); return;}
-    questions=getRandom(); current=0;
-  }
-  document.getElementById("level").innerText="Level "+level;
-  let q=questions[current];
-  document.getElementById("question").innerText=q.q;
-  let ansDiv=document.getElementById("answers"); ansDiv.innerHTML="";
-  q.a.forEach((ans,i)=>{
-    let btn=document.createElement("button");
-    btn.innerText=ans;
-    btn.onclick=()=>selectAns(i);
-    ansDiv.appendChild(btn);
-  });
-  startTimer();
-}
-function startTimer(){ timeLeft=10; document.getElementById("timer").innerText="⏳ "+timeLeft;
-  timerInterval=setInterval(()=>{
-    timeLeft--; document.getElementById("timer").innerText="⏳ "+timeLeft;
-    if(timeLeft<=0){clearInterval(timerInterval); lose();}
-  },1000);
-}
-function cinematic(){ let o=document.getElementById("cinemaOverlay"); o.style.opacity="0.7"; setTimeout(()=>o.style.opacity="0",300); }
-function selectAns(i){ clearInterval(timerInterval); document.getElementById("clickSound").play(); cinematic();
-  if(i!==questions[current].c){lose(); return;} current++; setTimeout(nextQ,500);
-}
-function winGame(){ document.getElementById("quizResult").innerText="كسبتي 😳❤️🔥"; document.getElementById("finalSection").style.display="block"; }
-function lose(){ document.getElementById("quizResult").innerText="خسرتي 😈 جربي تاني"; document.getElementById("question").classList.add("glitch"); }
-
 /* Stars Background */
-let canvas=document.getElementById("bg"); let ctx=canvas.getContext("2d"); canvas.width=window.innerWidth; canvas.height=window.innerHeight;
-let stars=[]; for(let i=0;i<70;i++){ stars.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,size:Math.random()*2+1,speed:Math.random()*1+0.3}); }
-function animate(){ ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle="white"; stars.forEach(s=>{ctx.beginPath();ctx.arc(s.x,s.y,s.size,0,Math.PI*2);ctx.fill(); s.y+=s.speed; if(s.y>canvas.height)s.y=0;}); requestAnimationFrame(animate);}
+let canvas=document.getElementById("bg"); 
+let ctx=canvas.getContext("2d"); 
+canvas.width=window.innerWidth; 
+canvas.height=window.innerHeight;
+let stars=[]; 
+for(let i=0;i<70;i++){ 
+  stars.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,size:Math.random()*2+1,speed:Math.random()*1+0.3}); 
+}
+function animate(){ 
+  ctx.clearRect(0,0,canvas.width,canvas.height); 
+  ctx.fillStyle="white"; 
+  stars.forEach(s=>{
+    ctx.beginPath();ctx.arc(s.x,s.y,s.size,0,Math.PI*2);ctx.fill(); 
+    s.y+=s.speed; 
+    if(s.y>canvas.height)s.y=0;
+  }); 
+  requestAnimationFrame(animate);
+}
 animate();
+
+/* Confetti */
+function startConfetti(){
+  for(let i=0;i<100;i++){
+    let confetti=document.createElement("div");
+    confetti.classList.add("confetti-piece");
+    confetti.style.backgroundColor=`hsl(${Math.random()*360},100%,50%)`;
+    confetti.style.left=Math.random()*window.innerWidth+"px";
+    confetti.style.animationDuration=(2+Math.random()*3)+"s";
+    document.body.appendChild(confetti);
+    setTimeout(()=>confetti.remove(),4000);
+  }
+}
+
+/* فتح صفحة أشعار مع Typing Animation */
+function openPoemPage(){
+  let newWindow = window.open("", "_blank");
+  newWindow.document.write(`
+    <html lang="ar">
+    <head>
+      <meta charset="UTF-8">
+      <title>اشعار ليكي ❤️</title>
+      <style>
+        body { background:linear-gradient(45deg,#141e30,#243b55); color:white; font-family:Arial; text-align:center; padding:50px; }
+        h1 { color:#ff4d6d; }
+        p { font-size:20px; margin:20px 0; line-height:1.5; min-height:120px; }
+      </style>
+    </head>
+    <body>
+      <h1>اشعار ليكي يا روحي ❤️</h1>
+      <audio id="poemMusic" loop autoplay>
+        <source src="music.mp3" type="audio/mp3">
+      </audio>
+      <div id="poems"></div>
+      <script>
+        const poems = [
+          "زهراء، انتي نجم في سمايا مضيء\\nضحكتك تنور أيامي الحزينة\\nوجودك جنبي يطمن قلبي ويعطيه أمل\\nكل لحظة معاك أحلى من اللي قبلها\\nمهما بعدت الدنيا بينا، قلبي معاكي\\nحبي ليكي يزيد كل يوم أكثر\\nلمستك تذيب أي هم في قلبي\\nانتي أجمل هدية من ربنا 💖\\nصوتك موسيقى تعزف في أذني\\nوابتسامتك نور يملأ حياتي ❤️",
+          "يا زهرة قلبي وروحي\\nكل يوم بحس بحبك أكثر\\nلما بشوفك يضوي قلبي\\nذكرياتنا محفورة في قلبي\\nمهما حصل، أنا معاك\\nحبنا أقوى من أي تحدي\\nانتي اللي بتكملي نصفي\\nقلبي ملكك وحدك\\nالأيام معاك وردية وجميلة\\nيا روحي، انتي حلمي اللي اتحقق 💌",
+          "يا ملاكي ونجمة ليلي\\nكل لحظة معاك لا تنسى\\nلمسة إيدك تطمن قلبي\\nوجودك جنبي يعطيني أمان\\nحبي ليكي بلا حدود\\nأيامي معاك مليانة فرح وسعادة\\nانتي سبب ابتسامتي\\nقلبي وروحي ملكك\\nمهما الدنيا تغيرت، حبنا ثابت\\nيا زهرة قلبي، انتي حياتي كلها 🌹"
+        ];
+        const container = document.getElementById('poems');
+        let i = 0;
+
+        function showPoem(index){
+          const p = document.createElement('p');
+          container.appendChild(p);
+          let text = poems[index];
+          let charIndex = 0;
+          function typeChar(){
+            if(charIndex < text.length){
+              if(text[charIndex]==="\\n") p.innerHTML+="<br>";
+              else p.innerHTML+=text[charIndex];
+              charIndex++;
+              setTimeout(typeChar,50);
+            } else if(index+1 < poems.length){
+              setTimeout(()=>showPoem(index+1),500);
+            }
+          }
+          typeChar();
+        }
+
+        showPoem(0);
+      </script>
+    </body>
+    </html>
+  `);
+}
 </script>
 </body>
 </html>
